@@ -37,7 +37,7 @@ export const ROUTES = [
     },
     trafficNotice: {
       to_school: null,
-      to_station: '2026-2학기부터 하교 시 무조건 탕정역 경유'
+      to_station: null
     },
     stops: [
       { id: 'campusDep', name: '아산캠퍼스 출발', type: 'dep' },
