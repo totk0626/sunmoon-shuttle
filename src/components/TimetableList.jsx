@@ -93,9 +93,6 @@ export default function TimetableList({ route, currentTime }) {
               <span className="legend-chip legend-student-hall">
                 <MapPin size={11} /> 학생회관 경유 (13:30~15:30 / 19:30~막차)
               </span>
-              <span className="legend-chip legend-engineering">
-                🏫 공대 승강장 출발 (기타 시간)
-              </span>
             </div>
 
             <button
@@ -179,8 +176,6 @@ export default function TimetableList({ route, currentTime }) {
                             <span className="note-badge badge-student-hall">🏛️ 학생회관 경유</span>
                           ) : item.note ? (
                             <span className="note-badge" style={{ backgroundColor: 'var(--bg-subtle)', color: 'var(--text-sub)' }}>{item.note}</span>
-                          ) : item.campusDep ? (
-                            <span className="note-badge badge-engineering">🏫 공대 출발</span>
                           ) : (
                             <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>-</span>
                           )}
