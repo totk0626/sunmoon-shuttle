@@ -29,7 +29,7 @@ export default function TimetableList({ route, currentTime }) {
       if (diffMins < 0) isPassed = true;
     }
 
-    // Rule 3: Identify if this trip stops by Student Council Building (학생회관 승강장 경유)
+    // Identify if this trip stops by Student Council Building (학생회관 승강장 경유)
     const isStudentHall = item.campusDep && isStudentCouncilTime(item.campusDep);
 
     return {
@@ -101,25 +101,57 @@ export default function TimetableList({ route, currentTime }) {
               onClick={() => setHidePassed(!hidePassed)}
             >
               {hidePassed ? <EyeOff size={13} /> : <Eye size={13} />}
-              <span>{hidePassed ? '지나간 차편 숨김 중' : '지나간 차편 포함해서 보기'}</span>
+              <span>{hidePassed ? '지나간 차편 숨김 중' : '지나간 차편 포함'}</span>
             </button>
           </div>
 
-          <div className="timetable-scroll-wrapper">
+          {/* Isolated Scroll Box for Table (No Horizontal Scroll Needed!) */}
+          <div className="timetable-scroll-box">
             <table className="timetable-table">
               <thead>
-                <tr>
-                  <th style={{ width: '38px' }}>순번</th>
-                  {route.stops.map(stop => (
-                    <th key={stop.id}>{stop.name}</th>
-                  ))}
-                  <th style={{ width: '100px' }}>승강장 / 특이사항</th>
-                </tr>
+                {route.id === 'cheonan_asan_tangjeong' && (
+                  <tr>
+                    <th style={{ width: '30px' }}>순번</th>
+                    <th>캠퍼스</th>
+                    <th>천안아산역</th>
+                    <th>도착</th>
+                    <th style={{ width: '85px' }}>특이사항</th>
+                  </tr>
+                )}
+                {route.id === 'cheonan_station' && (
+                  <tr>
+                    <th style={{ width: '30px' }}>순번</th>
+                    <th>캠퍼스</th>
+                    <th>천안역</th>
+                    <th>도착</th>
+                    <th style={{ width: '85px' }}>특이사항</th>
+                  </tr>
+                )}
+                {route.id === 'cheonan_terminal' && (
+                  <tr>
+                    <th style={{ width: '30px' }}>순번</th>
+                    <th>캠퍼스</th>
+                    <th>터미널</th>
+                    <th>도착</th>
+                    <th style={{ width: '85px' }}>특이사항</th>
+                  </tr>
+                )}
+                {route.id === 'onyang_asan' && (
+                  <tr>
+                    <th style={{ width: '26px' }}>순번</th>
+                    <th>캠퍼스</th>
+                    <th>주공</th>
+                    <th>온양역</th>
+                    <th>터미널</th>
+                    <th>도착</th>
+                    <th style={{ width: '70px' }}>비고</th>
+                  </tr>
+                )}
               </thead>
               <tbody>
                 {displayedList.length === 0 ? (
                   <tr>
-                    <td colSpan={route.stops.length + 2} style={{ padding: '16px', color: 'var(--text-muted)' }}>
+                    <td colSpan={6} style={{ padding: '16px', color: 'var(--text-muted)' }}>
                       지나간 차편이 숨겨져 있습니다. [지나간 차편 포함]을 누르면 확인할 수 있습니다.
                     </td>
                   </tr>
@@ -173,7 +205,7 @@ export default function TimetableList({ route, currentTime }) {
                           {item.isNext ? (
                             <span className="note-badge badge-next">다음 차편</span>
                           ) : item.isStudentHall ? (
-                            <span className="note-badge badge-student-hall">🏛️ 학생회관 경유</span>
+                            <span className="note-badge badge-student-hall">🏛️ 학생회관</span>
                           ) : item.note ? (
                             <span className="note-badge" style={{ backgroundColor: 'var(--bg-subtle)', color: 'var(--text-sub)' }}>{item.note}</span>
                           ) : (

@@ -29,7 +29,7 @@ export default function Header({
           </div>
           <div>
             <div className="brand-title">
-              선문 셔틀 <span className="haedal-badge">🦦 해달이</span>
+              선문 셔틀
             </div>
           </div>
         </div>
