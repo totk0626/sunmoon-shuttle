@@ -733,11 +733,8 @@ body {
 }
 
 .timetable-scroll-wrapper {
-  max-height: 420px;
-  overflow-y: auto;
   overflow-x: auto;
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
+  width: 100%;
 }
 
 .timetable-table {
@@ -750,15 +747,15 @@ body {
 
 .timetable-table th {
   position: sticky;
-  top: 0;
-  z-index: 10;
+  top: 84px;
+  z-index: 20;
   background-color: var(--bg-card);
   color: var(--text-main);
   padding: 10px 6px;
   font-weight: 900;
-  border-bottom: 2px solid var(--border-color);
+  border-bottom: 2px solid var(--primary);
   white-space: nowrap;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
 }
 
 .timetable-table td {
