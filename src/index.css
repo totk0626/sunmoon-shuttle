@@ -95,12 +95,13 @@ body {
 .app-header {
   background: var(--bg-card);
   border-bottom: 1px solid var(--border-color);
-  padding: 12px 0 10px 0;
+  padding: 10px 0 8px 0;
   position: sticky;
   top: 0;
-  z-index: 50;
-  box-shadow: var(--shadow-sm);
-  backdrop-filter: blur(10px);
+  z-index: 100;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .header-top {
@@ -734,7 +735,12 @@ body {
 
 .timetable-scroll-wrapper {
   overflow-x: auto;
+  overflow-y: hidden;
+  touch-action: pan-x;
+  -webkit-overflow-scrolling: touch;
   width: 100%;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
 }
 
 .timetable-table {
