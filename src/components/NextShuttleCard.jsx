@@ -124,14 +124,6 @@ export default function NextShuttleCard({ selectedRoute, currentTime, directionF
               ))}
             </div>
           )}
-
-          {/* Quick Adjust Strip */}
-          <div className="widget-time-adjust-strip">
-            <span className="strip-label">시간표 변경 테스트</span>
-            <button type="button" className="strip-adjust-btn" onClick={onOpenSimulator}>
-              <Sliders size={13} /> 출발 시간 조절
-            </button>
-          </div>
         </div>
       )}
     </div>

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Bus, Clock, Sliders, Info, Sun, Moon, RefreshCw, AlertCircle } from 'lucide-react';
-import { getDayInfo, getBoardingStopLocation } from '../utils/timeUtils';
+import { Bus, Clock, Sliders, Info, Sun, Moon, RefreshCw } from 'lucide-react';
+import { getDayInfo } from '../utils/timeUtils';
 
 export default function Header({
   currentTime,
@@ -12,7 +12,6 @@ export default function Header({
   onToggleTheme
 }) {
   const dayInfo = getDayInfo(currentTime);
-  const boardingInfo = getBoardingStopLocation(currentTime);
 
   const formatClock = (date) => {
     const hours = date.getHours().toString().padStart(2, '0');
@@ -30,7 +29,7 @@ export default function Header({
           </div>
           <div>
             <div className="brand-title">
-              선문 셔틀 <span>LIVE</span>
+              선문 셔틀
             </div>
           </div>
         </div>
@@ -81,11 +80,6 @@ export default function Header({
               <RefreshCw size={11} /> 실제시간
             </button>
           )}
-        </div>
-
-        <div className="boarding-location-badge" style={{ backgroundColor: `${boardingInfo.badgeColor}15`, color: boardingInfo.badgeColor, borderColor: `${boardingInfo.badgeColor}30` }}>
-          <AlertCircle size={12} />
-          <span>{boardingInfo.locationName}</span>
         </div>
       </div>
     </header>
