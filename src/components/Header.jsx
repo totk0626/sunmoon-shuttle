@@ -24,15 +24,12 @@ export default function Header({
     <header className="app-header">
       <div className="header-top container">
         <div className="brand-group">
-          <div className="brand-icon-haedal" title="선문대학교 해달이 마스코트">
-            🦦
+          <div className="brand-icon">
+            <Bus size={20} />
           </div>
           <div>
             <div className="brand-title">
-              선문 셔틀
-            </div>
-            <div className="brand-subtitle">
-              해달이 실시간 셔틀버딩 🦦
+              선문 셔틀 <span className="haedal-badge">🦦 해달이</span>
             </div>
           </div>
         </div>
