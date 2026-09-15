@@ -90,7 +90,7 @@ body {
 
 .main-content {
   flex: 1;
-  padding-top: 96px;
+  padding-top: 118px;
   padding-bottom: 40px;
 }
 
@@ -363,13 +363,13 @@ body {
 }
 
 .special-note-row {
-  background-color: #fff7ed;
-  border: 1px solid #fed7aa;
-  color: #c2410c;
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-weight: 800;
-  font-size: 0.74rem;
+  background-color: var(--primary-light);
+  border: 1px solid var(--border-color);
+  color: var(--primary-dark);
+  padding: 5px 9px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.76rem;
 }
 
 /* HERO NEXT SHUTTLE WIDGET CARD (해달이 컬러 튜닝) */
