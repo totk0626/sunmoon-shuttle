@@ -67,7 +67,7 @@ export default function ConvenienceModal({ isOpen, onClose }) {
 
               <div className="info-card-box">
                 <div style={{ fontWeight: 800, marginBottom: 4 }}>
-                  🏫 공대 승강장 탑승 시간대
+                  🏫 기타 시간대 승강장 탑승
                 </div>
                 <p style={{ fontSize: '0.82rem', color: 'var(--text-sub)' }}>
                   위 학생회관 탑승 시간대를 제외한 모든 시간대
