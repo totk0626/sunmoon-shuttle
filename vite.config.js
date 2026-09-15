@@ -6,11 +6,12 @@ export default defineConfig({
   plugins: [react()],
   base: './',
   build: {
+    emptyOutDir: true,
     rollupOptions: {
       output: {
-        entryFileNames: `assets/[name]-[hash]-${Date.now()}.js`,
-        chunkFileNames: `assets/[name]-[hash]-${Date.now()}.js`,
-        assetFileNames: `assets/[name]-[hash]-${Date.now()}[extname]`
+        entryFileNames: `assets/app-[hash]-${Date.now()}.js`,
+        chunkFileNames: `assets/chunk-[hash]-${Date.now()}.js`,
+        assetFileNames: `assets/style-[hash]-${Date.now()}[extname]`
       }
     }
   },
