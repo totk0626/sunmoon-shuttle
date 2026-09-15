@@ -732,20 +732,33 @@ body {
   border-color: var(--primary);
 }
 
+.timetable-scroll-wrapper {
+  max-height: 420px;
+  overflow-y: auto;
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+}
+
 .timetable-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   text-align: center;
   font-size: 0.82rem;
 }
 
 .timetable-table th {
-  background-color: var(--bg-subtle);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: var(--bg-card);
   color: var(--text-main);
-  padding: 8px 6px;
-  font-weight: 800;
-  border-bottom: 1px solid var(--border-color);
+  padding: 10px 6px;
+  font-weight: 900;
+  border-bottom: 2px solid var(--border-color);
   white-space: nowrap;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.04);
 }
 
 .timetable-table td {

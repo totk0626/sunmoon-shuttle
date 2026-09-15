@@ -105,7 +105,7 @@ export default function TimetableList({ route, currentTime }) {
             </button>
           </div>
 
-          <div style={{ overflowX: 'auto' }}>
+          <div className="timetable-scroll-wrapper">
             <table className="timetable-table">
               <thead>
                 <tr>
