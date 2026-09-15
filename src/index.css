@@ -90,19 +90,21 @@ body {
 
 .main-content {
   flex: 1;
-  padding-top: 12px;
+  padding-top: 96px;
   padding-bottom: 40px;
 }
 
-/* Header */
+/* Header (Always Fixed at Top) */
 .app-header {
   background: var(--bg-card);
   border-bottom: 1.5px solid var(--border-color);
   padding: 10px 0 8px 0;
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 100;
-  box-shadow: var(--shadow-sm);
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.12);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
