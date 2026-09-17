@@ -104,8 +104,8 @@ export const ROUTES = [
       to_station: '약 30분 소요'
     },
     trafficNotice: {
-      to_school: '출근 혼잡시간(08:00~09:00) 체증 시 +5분 소요 (약 30분)',
-      to_station: '퇴근 혼잡시간(17:30~19:30) 체증 시 +5분 소요 (약 35분)'
+      to_school: '(출근 체증 시 +5분)',
+      to_station: '(퇴근 체증 시 +5분)'
     },
     stops: [
       { id: 'campusDep', name: '아산캠퍼스 출발', type: 'dep' },
@@ -163,8 +163,8 @@ export const ROUTES = [
       to_station: '약 30분 소요'
     },
     trafficNotice: {
-      to_school: '출근 혼잡시간(08:00~09:00) 체증 시 +10분 소요 (약 40분)',
-      to_station: '퇴근 혼잡시간(16:30~19:30) 체증 시 +10분 소요 (약 40분)'
+      to_school: '(출근 체증 시 +10분)',
+      to_station: '(퇴근 체증 시 +10분)'
     },
     stops: [
       { id: 'campusDep', name: '아산캠퍼스 출발', type: 'dep' },
@@ -227,8 +227,8 @@ export const ROUTES = [
       to_station: '약 20~25분 소요'
     },
     trafficNotice: {
-      to_school: '온양온천역 약 15분 / 아산터미널 약 20분 소요',
-      to_station: '퇴근 시간대 시내 구간 일부 지연 가능'
+      to_school: '(온양역 15분 / 터미널 20분)',
+      to_station: '(퇴근 시 시내 구간 지연 가능)'
     },
     stops: [
       { id: 'campusDep', name: '아산캠퍼스 출발', type: 'dep' },

@@ -38,7 +38,7 @@ export default function NextShuttleCard({ selectedRoute, currentTime, directionF
     }
   };
 
-  const isUrgent = nextBus && nextBus.diffMins <= 5;
+  const isUrgent = nextBus && nextBus.diffMins <= 3;
   const isSoon = nextBus && nextBus.diffMins <= 15;
 
   return (
@@ -85,7 +85,7 @@ export default function NextShuttleCard({ selectedRoute, currentTime, directionF
           {/* Countdown Main Display */}
           <div className="widget-timer-block">
             <div className="timer-sub-text">
-              <span className="live-pulse-dot"></span>
+              <span className={`live-pulse-dot ${isUrgent ? 'red-pulse' : ''}`}></span>
               <span>다음 셔틀버스 출발까지</span>
               {isUrgent && <span style={{ color: '#fca5a5', fontWeight: 900, marginLeft: 4 }}>⚡ 곧 출발</span>}
             </div>

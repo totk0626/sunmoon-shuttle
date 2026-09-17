@@ -56,21 +56,21 @@ export default function ConvenienceModal({ isOpen, onClose }) {
           {activeTab === 'stops' && (
             <div className="tab-pane">
               <div className="sheet-section-title"><MapPin size={14} /> 캠퍼스 탑승 위치 안내</div>
-              <div className="info-card-box blue-bg">
-                <div style={{ fontWeight: 800, marginBottom: 4, color: '#1e40af' }}>
-                  🏛️ 학생회관 승강장 탑승 시간대
+              <div className="info-card-box">
+                <div style={{ fontWeight: 800, marginBottom: 4 }}>
+                  🏫 공대 셔틀장 탑승
                 </div>
-                <p style={{ fontSize: '0.82rem', color: '#1e3a8a' }}>
-                  학기 중 평일 <strong>13:30 ~ 15:30</strong> 및 <strong>19:30 ~ 막차까지</strong>
+                <p style={{ fontSize: '0.82rem', color: 'var(--text-sub)' }}>
+                  위 학생회관 탑승 가능 시간대를 제외한 모든 시간대
                 </p>
               </div>
 
-              <div className="info-card-box">
-                <div style={{ fontWeight: 800, marginBottom: 4 }}>
-                  🏫 기타 시간대 승강장 탑승
+              <div className="info-card-box blue-bg">
+                <div style={{ fontWeight: 800, marginBottom: 4, color: '#1e40af' }}>
+                  🏛️ 학생회관 승강장 탑승 가능 시간대
                 </div>
-                <p style={{ fontSize: '0.82rem', color: 'var(--text-sub)' }}>
-                  위 학생회관 탑승 시간대를 제외한 모든 시간대
+                <p style={{ fontSize: '0.82rem', color: '#1e3a8a' }}>
+                  학기 중 평일 <strong>13:30 ~ 15:30</strong> 및 <strong>19:30 ~ 막차까지</strong>
                 </p>
               </div>
             </div>

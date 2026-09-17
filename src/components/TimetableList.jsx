@@ -81,11 +81,11 @@ export default function TimetableList({ route, currentTime }) {
 
         <div className="acc-arrow-badge">
           <span>{isExpanded ? '시간표 접기' : '전체 보기'}</span>
-          {isExpanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+          <ChevronDown size={18} className={`acc-arrow-icon ${isExpanded ? 'rotated' : ''}`} />
         </div>
       </button>
 
-      {isExpanded && (
+      <div className={`timetable-accordion-wrapper ${isExpanded ? 'expanded' : ''}`}>
         <div className="timetable-accordion-body">
           {/* Boarding Location Legend & Filter Bar */}
           <div className="timetable-legend-row">
@@ -220,7 +220,7 @@ export default function TimetableList({ route, currentTime }) {
             </table>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }

@@ -33,8 +33,35 @@ export default function Header({
             </div>
           </div>
         </div>
+      </div>
+
+      <div className="header-status-bar container">
+        <div className="time-display-group">
+          <div className="time-display">
+            <Clock size={14} className="clock-icon" />
+            <span className="clock-time">{formatClock(currentTime)}</span>
+            <span className={`day-badge ${dayInfo.isFriday ? 'friday' : dayInfo.isWeekend ? 'weekend' : 'weekday'}`}>
+              {dayInfo.dayName}
+            </span>
+          </div>
+
+          {isSimulated && (
+            <button type="button" className="reset-time-btn" onClick={onResetTime}>
+              <RefreshCw size={11} /> 실제시간
+            </button>
+          )}
+        </div>
 
         <div className="header-actions">
+          <button
+            type="button"
+            className={`action-icon-btn ${isSimulated ? 'active' : ''}`}
+            onClick={onOpenSimulator}
+            title="출발 시간 조절"
+          >
+            <Sliders size={16} />
+          </button>
+
           <button
             type="button"
             className="action-icon-btn"
@@ -52,34 +79,6 @@ export default function Header({
           >
             <Info size={16} />
           </button>
-        </div>
-      </div>
-
-      <div className="header-status-bar container">
-        <div className="time-display-group">
-          <div className="time-display">
-            <Clock size={14} className="clock-icon" />
-            <span className="clock-time">{formatClock(currentTime)}</span>
-            <span className={`day-badge ${dayInfo.isFriday ? 'friday' : dayInfo.isWeekend ? 'weekend' : 'weekday'}`}>
-              {dayInfo.dayName}
-            </span>
-          </div>
-
-          {/* Icon-only time adjust button right next to clock */}
-          <button
-            type="button"
-            className={`action-icon-btn sim-icon-only-btn ${isSimulated ? 'active' : ''}`}
-            onClick={onOpenSimulator}
-            title="출발 시간 조절"
-          >
-            <Sliders size={15} />
-          </button>
-
-          {isSimulated && (
-            <button type="button" className="reset-time-btn" onClick={onResetTime}>
-              <RefreshCw size={11} /> 실제시간
-            </button>
-          )}
         </div>
       </div>
     </header>

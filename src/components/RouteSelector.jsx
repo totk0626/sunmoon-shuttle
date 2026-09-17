@@ -26,10 +26,6 @@ export default function RouteSelector({
               key={route.id}
               type="button"
               className={`route-chip-btn ${isSelected ? 'active' : ''}`}
-              style={{
-                borderColor: isSelected ? route.color : 'var(--border-color)',
-                backgroundColor: isSelected ? route.color : 'var(--bg-card)'
-              }}
               onClick={() => onSelectRoute(route.id)}
             >
               <span>{route.shortName || route.name}</span>
@@ -60,21 +56,17 @@ export default function RouteSelector({
         {/* Direction-Specific Travel Time & Route Card */}
         <div className="route-summary-banner">
           <div className="summary-row">
-            <Clock size={14} className="banner-icon-green" />
+            <Clock size={14} className="banner-icon-blue" />
             <div className="summary-text">
               <strong className="summary-label">
                 {directionFilter === 'to_school' ? '등교 소요시간:' : '하교 소요시간:'}
               </strong>
               <span className="travel-time-highlight">{currentTravelTime}</span>
+              {currentTrafficNotice && (
+                <span className="traffic-note-inline">{currentTrafficNotice}</span>
+              )}
             </div>
           </div>
-
-          {currentTrafficNotice && (
-            <div className="summary-row special-note-row">
-              <AlertTriangle size={13} className="banner-icon-orange" />
-              <span>{currentTrafficNotice}</span>
-            </div>
-          )}
 
           <div className="summary-row" style={{ marginTop: 2 }}>
             <Navigation size={13} className="banner-icon-blue" />
