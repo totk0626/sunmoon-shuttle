@@ -193,6 +193,12 @@ body {
   border-color: var(--primary);
 }
 
+[data-theme="dark"] .action-icon-btn.active {
+  background-color: #ffffff;
+  color: #111111;
+  border-color: #ffffff;
+}
+
 .header-status-bar {
   display: flex;
   align-items: center;
