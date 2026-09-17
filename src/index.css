@@ -788,6 +788,27 @@ body {
   white-space: nowrap;
 }
 
+.timetable-table th.th-boarding {
+  color: var(--primary) !important;
+  font-weight: 900 !important;
+  background-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .timetable-table th.th-boarding {
+  color: #ffffff !important;
+  background-color: #2c2c2c !important;
+}
+
+.timetable-table td.cell-active-dep {
+  font-weight: 900 !important;
+  color: var(--text-main) !important;
+  background-color: rgba(0, 0, 0, 0.025);
+}
+
+[data-theme="dark"] .timetable-table td.cell-active-dep {
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
 .timetable-table td {
   padding: 7px 2px;
   border-bottom: 1px solid var(--border-subtle);

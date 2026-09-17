@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ChevronDown, ChevronUp, Eye, EyeOff, Calendar, ShieldCheck, MapPin } from 'lucide-react';
 import { timeStringToMinutes, getDayInfo, isStudentCouncilTime } from '../utils/timeUtils';
 
-export default function TimetableList({ route, currentTime }) {
+export default function TimetableList({ route, currentTime, directionFilter = 'to_school' }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [hidePassed, setHidePassed] = useState(true);
 
@@ -17,14 +17,31 @@ export default function TimetableList({ route, currentTime }) {
     list = list.filter(item => !item.friOff);
   }
 
+  // Calculate passed status based on the SELECTED DIRECTION
+  // 등교 (to_school): 역/터미널 출발 시각 기준!
+  // 하교 (to_station): 아산캠퍼스 출발 시각 기준!
   let processedList = list.map(item => {
-    const depTimeStr = item.campusDep || item.asanDep || item.cheonanDep || item.terminalDep || item.onyangDep;
-    const depMins = timeStringToMinutes(depTimeStr);
+    let relevantDepTimeStr = null;
+
+    if (directionFilter === 'to_school') {
+      if (route.id === 'onyang_asan') {
+        relevantDepTimeStr = item.onyangDep || item.terminalDep || item.jugongDep;
+      } else {
+        relevantDepTimeStr = item.asanDep || item.cheonanDep || item.terminalDep || item.onyangDep;
+      }
+    } else {
+      relevantDepTimeStr = item.campusDep;
+    }
+
+    const depMins = timeStringToMinutes(relevantDepTimeStr);
 
     let isPassed = false;
     let diffMins = null;
 
-    if (depMins !== null) {
+    if (!relevantDepTimeStr) {
+      // 해당 방향(등교/하교)으로 운행하지 않는 차편
+      isPassed = true;
+    } else if (depMins !== null) {
       diffMins = depMins - currentMins;
       if (diffMins < 0) isPassed = true;
     }
@@ -34,7 +51,7 @@ export default function TimetableList({ route, currentTime }) {
 
     return {
       ...item,
-      depTimeStr,
+      relevantDepTimeStr,
       depMins,
       diffMins,
       isPassed,
@@ -42,7 +59,7 @@ export default function TimetableList({ route, currentTime }) {
     };
   });
 
-  // Mark the single next upcoming trip
+  // Mark the single next upcoming trip FOR THE CURRENT DIRECTION
   let foundNext = false;
   processedList = processedList.map(item => {
     if (!foundNext && item.diffMins !== null && item.diffMins >= 0) {
@@ -52,7 +69,7 @@ export default function TimetableList({ route, currentTime }) {
     return item;
   });
 
-  const validCount = processedList.length;
+  const validCount = processedList.filter(i => i.relevantDepTimeStr !== null).length;
   const remainingCount = processedList.filter(i => i.diffMins !== null && i.diffMins >= 0).length;
 
   // Filter based on hidePassed state
@@ -60,6 +77,8 @@ export default function TimetableList({ route, currentTime }) {
     if (hidePassed && item.isPassed && !item.isNext) return false;
     return true;
   });
+
+  const isToSchool = directionFilter === 'to_school';
 
   return (
     <div className="timetable-accordion-container">
@@ -71,10 +90,12 @@ export default function TimetableList({ route, currentTime }) {
         <div className="acc-title-group">
           <Calendar size={18} color="var(--primary)" />
           <span>전체 시간표</span>
-          <span className="acc-count-pill">남은 차편 {remainingCount}/{validCount}회</span>
+          <span className="acc-count-pill">
+            {isToSchool ? '등교' : '하교'} 남은 차편 {remainingCount}/{validCount}회
+          </span>
           {dayInfo.isFriday && (
             <span className="fri-excluded-badge">
-              <ShieldCheck size={11} /> 금(X) 차편 제외됨
+              <ShieldCheck size={11} /> 금(X) 제외됨
             </span>
           )}
         </div>
@@ -105,6 +126,25 @@ export default function TimetableList({ route, currentTime }) {
             </button>
           </div>
 
+          {/* Direction-specific Guidance Banner */}
+          <div style={{
+            fontSize: '0.74rem',
+            padding: '5px 10px',
+            marginBottom: '6px',
+            borderRadius: '6px',
+            backgroundColor: 'var(--bg-card)',
+            color: 'var(--text-sub)',
+            border: '1px solid var(--border-color)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between'
+          }}>
+            <span>
+              현재 <strong>{isToSchool ? '등교 (역/터미널 승차 ➔ 학교행)' : '하교 (캠퍼스 승차 ➔ 귀가행)'}</strong> 기준 시간표입니다.
+            </span>
+            <span style={{ color: 'var(--accent-green)', fontWeight: 800 }}>📍 승차 시간 기준 정렬</span>
+          </div>
+
           {/* Isolated Scroll Box for Table (No Horizontal Scroll Needed!) */}
           <div className="timetable-scroll-box">
             <table className="timetable-table">
@@ -112,8 +152,12 @@ export default function TimetableList({ route, currentTime }) {
                 {route.id === 'cheonan_asan_tangjeong' && (
                   <tr>
                     <th style={{ width: '30px' }}>순번</th>
-                    <th>캠퍼스</th>
-                    <th>천안아산역</th>
+                    <th className={!isToSchool ? 'th-boarding' : ''}>
+                      {!isToSchool ? '캠퍼스 (승차 📍)' : '캠퍼스 (회차)'}
+                    </th>
+                    <th className={isToSchool ? 'th-boarding' : ''}>
+                      {isToSchool ? '천안아산역 (승차 📍)' : '천안아산역'}
+                    </th>
                     <th>도착</th>
                     <th style={{ width: '85px' }}>특이사항</th>
                   </tr>
@@ -121,8 +165,12 @@ export default function TimetableList({ route, currentTime }) {
                 {route.id === 'cheonan_station' && (
                   <tr>
                     <th style={{ width: '30px' }}>순번</th>
-                    <th>캠퍼스</th>
-                    <th>천안역</th>
+                    <th className={!isToSchool ? 'th-boarding' : ''}>
+                      {!isToSchool ? '캠퍼스 (승차 📍)' : '캠퍼스 (회차)'}
+                    </th>
+                    <th className={isToSchool ? 'th-boarding' : ''}>
+                      {isToSchool ? '천안역 (승차 📍)' : '천안역'}
+                    </th>
                     <th>도착</th>
                     <th style={{ width: '85px' }}>특이사항</th>
                   </tr>
@@ -130,8 +178,12 @@ export default function TimetableList({ route, currentTime }) {
                 {route.id === 'cheonan_terminal' && (
                   <tr>
                     <th style={{ width: '30px' }}>순번</th>
-                    <th>캠퍼스</th>
-                    <th>터미널</th>
+                    <th className={!isToSchool ? 'th-boarding' : ''}>
+                      {!isToSchool ? '캠퍼스 (승차 📍)' : '캠퍼스 (회차)'}
+                    </th>
+                    <th className={isToSchool ? 'th-boarding' : ''}>
+                      {isToSchool ? '터미널 (승차 📍)' : '터미널'}
+                    </th>
                     <th>도착</th>
                     <th style={{ width: '85px' }}>특이사항</th>
                   </tr>
@@ -139,9 +191,13 @@ export default function TimetableList({ route, currentTime }) {
                 {route.id === 'onyang_asan' && (
                   <tr>
                     <th style={{ width: '26px' }}>순번</th>
-                    <th>캠퍼스</th>
+                    <th className={!isToSchool ? 'th-boarding' : ''}>
+                      {!isToSchool ? '캠퍼스(승차📍)' : '캠퍼스'}
+                    </th>
                     <th>주공</th>
-                    <th>온양역</th>
+                    <th className={isToSchool ? 'th-boarding' : ''}>
+                      {isToSchool ? '온양역(승차📍)' : '온양역'}
+                    </th>
                     <th>터미널</th>
                     <th>도착</th>
                     <th style={{ width: '70px' }}>비고</th>
@@ -169,33 +225,49 @@ export default function TimetableList({ route, currentTime }) {
 
                         {route.id === 'cheonan_asan_tangjeong' && (
                           <>
-                            <td className="time-cell">{item.campusDep || '-'}</td>
-                            <td className="time-cell">{item.asanDep || '-'}</td>
+                            <td className={`time-cell ${!isToSchool ? 'cell-active-dep' : ''}`}>
+                              {item.campusDep || '-'}
+                            </td>
+                            <td className={`time-cell ${isToSchool ? 'cell-active-dep' : ''}`}>
+                              {item.asanDep || '-'}
+                            </td>
                             <td className="time-cell">{item.campusArr || '-'}</td>
                           </>
                         )}
 
                         {route.id === 'cheonan_station' && (
                           <>
-                            <td className="time-cell">{item.campusDep || '-'}</td>
-                            <td className="time-cell">{item.cheonanDep || '-'}</td>
+                            <td className={`time-cell ${!isToSchool ? 'cell-active-dep' : ''}`}>
+                              {item.campusDep || '-'}
+                            </td>
+                            <td className={`time-cell ${isToSchool ? 'cell-active-dep' : ''}`}>
+                              {item.cheonanDep || '-'}
+                            </td>
                             <td className="time-cell">{item.campusArr || '-'}</td>
                           </>
                         )}
 
                         {route.id === 'cheonan_terminal' && (
                           <>
-                            <td className="time-cell">{item.campusDep || '-'}</td>
-                            <td className="time-cell">{item.terminalDep || '-'}</td>
+                            <td className={`time-cell ${!isToSchool ? 'cell-active-dep' : ''}`}>
+                              {item.campusDep || '-'}
+                            </td>
+                            <td className={`time-cell ${isToSchool ? 'cell-active-dep' : ''}`}>
+                              {item.terminalDep || '-'}
+                            </td>
                             <td className="time-cell">{item.campusArr || '-'}</td>
                           </>
                         )}
 
                         {route.id === 'onyang_asan' && (
                           <>
-                            <td className="time-cell">{item.campusDep || '-'}</td>
+                            <td className={`time-cell ${!isToSchool ? 'cell-active-dep' : ''}`}>
+                              {item.campusDep || '-'}
+                            </td>
                             <td className="time-cell">{item.jugongDep || '-'}</td>
-                            <td className="time-cell">{item.onyangDep || '-'}</td>
+                            <td className={`time-cell ${isToSchool ? 'cell-active-dep' : ''}`}>
+                              {item.onyangDep || '-'}
+                            </td>
                             <td className="time-cell">{item.terminalDep || '-'}</td>
                             <td className="time-cell">{item.campusArr || '-'}</td>
                           </>
@@ -207,7 +279,9 @@ export default function TimetableList({ route, currentTime }) {
                           ) : item.isStudentHall ? (
                             <span className="note-badge badge-student-hall">🏛️ 학생회관</span>
                           ) : item.note ? (
-                            <span className="note-badge" style={{ backgroundColor: 'var(--bg-subtle)', color: 'var(--text-sub)' }}>{item.note}</span>
+                            <span className="note-badge" style={{ backgroundColor: 'var(--bg-card)', color: 'var(--text-sub)', border: '1px solid var(--border-color)' }}>
+                              {item.note}
+                            </span>
                           ) : (
                             <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>-</span>
                           )}

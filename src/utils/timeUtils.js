@@ -81,8 +81,13 @@ export function getUpcomingBuses(route, dateObj, directionFilter = 'to_school') 
 
     if (directionFilter === 'to_school') {
       // 등교 (캠퍼스행): 출발지는 역/터미널 출발 시각
-      depTimeStr = item.asanDep || item.cheonanDep || item.terminalDep || item.onyangDep;
-      depLocation = route.stops[1]?.name.replace(' 출발', '') || '역/터미널';
+      if (route.id === 'onyang_asan') {
+        depTimeStr = item.onyangDep || item.terminalDep || item.jugongDep;
+        depLocation = '온양온천역';
+      } else {
+        depTimeStr = item.asanDep || item.cheonanDep || item.terminalDep || item.onyangDep;
+        depLocation = route.stops[1]?.name.replace(' 출발', '') || '역/터미널';
+      }
       destTimeStr = item.campusArr;
       destLocation = '아산캠퍼스';
     } else {
