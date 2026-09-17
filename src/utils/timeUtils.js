@@ -75,9 +75,9 @@ export function getUpcomingBuses(route, dateObj, directionFilter = 'to_school') 
 
   validTrips.forEach(item => {
     let depTimeStr = null;
-    let depLocation = '아산캠퍼스';
+    let depLocation = '아산캠';
     let destTimeStr = null;
-    let destLocation = '아산캠퍼스';
+    let destLocation = '아산캠';
 
     if (directionFilter === 'to_school') {
       // 등교 (캠퍼스행): 출발지는 역/터미널 출발 시각
@@ -89,12 +89,12 @@ export function getUpcomingBuses(route, dateObj, directionFilter = 'to_school') 
         depLocation = route.stops[1]?.name.replace(' 출발', '') || '역/터미널';
       }
       destTimeStr = item.campusArr;
-      destLocation = '아산캠퍼스';
+      destLocation = '아산캠';
     } else {
       // 하교 (캠퍼스 출발): 출발지는 아산캠퍼스 출발 시각
       depTimeStr = item.campusDep;
       const isHall = depTimeStr && isStudentCouncilTime(depTimeStr);
-      depLocation = '아산캠퍼스';
+      depLocation = '아산캠';
 
       destTimeStr = item.asanDep || item.cheonanDep || item.terminalDep || item.onyangDep || item.campusArr;
       destLocation = route.stops[1]?.name.replace(' 출발', '') || '역/터미널';

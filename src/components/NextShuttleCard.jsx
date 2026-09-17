@@ -94,15 +94,18 @@ export default function NextShuttleCard({ selectedRoute, currentTime, directionF
               {formatSecsToMinSec(secCountdown)}
             </div>
 
-            {/* Time Info Badges */}
+            {/* Time Info Row: 출발 → 도착 */}
             <div className="widget-time-badges-row">
               <div className="badge-time-box">
-                {nextBus.depLocation}: {nextBus.depTimeStr} 출발
+                {nextBus.depTimeStr} 출발
               </div>
               {nextBus.destTimeStr && (
-                <div className="badge-dest-box">
-                  ➔ {nextBus.destLocation} ({nextBus.destTimeStr})
-                </div>
+                <>
+                  <ArrowRight size={15} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
+                  <div className="badge-dest-box">
+                    {nextBus.destTimeStr} 도착
+                  </div>
+                </>
               )}
             </div>
 
