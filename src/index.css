@@ -967,12 +967,18 @@ body {
   text-align: center;
   text-align-last: center;
   color: var(--text-main);
-  background-color: var(--bg-app);
-  border: 1.5px solid var(--primary);
+  background-color: var(--bg-card);
+  border: 1.5px solid var(--border-color);
   border-radius: var(--radius-md);
   outline: none;
   cursor: pointer;
   box-shadow: var(--shadow-sm);
+}
+
+[data-theme="dark"] .picker-wheel-select {
+  background-color: var(--bg-card);
+  color: var(--text-main);
+  border-color: rgba(255, 255, 255, 0.25);
 }
 
 .picker-colon {
@@ -1000,6 +1006,12 @@ body {
   background-color: var(--primary);
   border-color: var(--primary);
   color: #ffffff;
+}
+
+[data-theme="dark"] .friday-check-btn.active {
+  background-color: #ffffff;
+  border-color: #ffffff;
+  color: #111111;
 }
 
 .quick-time-grid {
