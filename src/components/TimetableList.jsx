@@ -155,7 +155,7 @@ export default function TimetableList({ route, currentTime, directionFilter = 't
                   <tr>
                     <th style={{ width: '30px' }}>순번</th>
                     <th className={!isToSchool ? 'th-boarding' : ''}>
-                      캠퍼스
+                      아산캠
                     </th>
                     <th className={isToSchool ? 'th-boarding' : ''}>
                       천안아산역
@@ -168,7 +168,7 @@ export default function TimetableList({ route, currentTime, directionFilter = 't
                   <tr>
                     <th style={{ width: '30px' }}>순번</th>
                     <th className={!isToSchool ? 'th-boarding' : ''}>
-                      캠퍼스
+                      아산캠
                     </th>
                     <th className={isToSchool ? 'th-boarding' : ''}>
                       천안역
@@ -181,7 +181,7 @@ export default function TimetableList({ route, currentTime, directionFilter = 't
                   <tr>
                     <th style={{ width: '30px' }}>순번</th>
                     <th className={!isToSchool ? 'th-boarding' : ''}>
-                      캠퍼스
+                      아산캠
                     </th>
                     <th className={isToSchool ? 'th-boarding' : ''}>
                       터미널
@@ -194,7 +194,7 @@ export default function TimetableList({ route, currentTime, directionFilter = 't
                   <tr>
                     <th style={{ width: '26px' }}>순번</th>
                     <th className={!isToSchool ? 'th-boarding' : ''}>
-                      캠퍼스
+                      아산캠
                     </th>
                     <th>주공</th>
                     <th className={isToSchool ? 'th-boarding' : ''}>
