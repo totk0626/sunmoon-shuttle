@@ -64,6 +64,7 @@ export function getUpcomingBuses(route, dateObj, directionFilter = 'to_school') 
 
   const { isFriday } = getDayInfo(dateObj);
   const currentMins = dateObj.getHours() * 60 + dateObj.getMinutes();
+  const currentSecs = dateObj.getHours() * 3600 + dateObj.getMinutes() * 60 + dateObj.getSeconds();
 
   // Friday filter: exclude friOff buses completely on Friday
   const validTrips = route.schedule.filter(item => {
@@ -105,7 +106,13 @@ export function getUpcomingBuses(route, dateObj, directionFilter = 'to_school') 
     const depMins = timeStringToMinutes(depTimeStr);
     if (depMins === null) return;
 
+    const depSecs = depMins * 60;
+    const diffSecs = depSecs - currentSecs;
     const diffMins = depMins - currentMins;
+
+    // 출발 시각 기준 20초 유예 - 출발 후 20초 지나야 "지나간 차편"으로 처리
+    const GRACE_SECS = 20;
+    const isPassed = diffSecs < -GRACE_SECS;
 
     processed.push({
       ...item,
@@ -115,13 +122,14 @@ export function getUpcomingBuses(route, dateObj, directionFilter = 'to_school') 
       destLocation,
       depMins,
       diffMins,
-      isPassed: diffMins < 0
+      diffSecs,
+      isPassed
     });
   });
 
   const upcoming = processed
-    .filter(item => item.diffMins >= 0)
-    .sort((a, b) => a.diffMins - b.diffMins);
+    .filter(item => !item.isPassed)
+    .sort((a, b) => a.depMins - b.depMins);
 
   return upcoming;
 }
