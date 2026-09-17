@@ -13,11 +13,13 @@ export default function Header({
 }) {
   const dayInfo = getDayInfo(currentTime);
 
-  const formatClock = (date) => {
+  const formatDateTime = (date) => {
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
     const hours = date.getHours().toString().padStart(2, '0');
     const mins = date.getMinutes().toString().padStart(2, '0');
-    const secs = date.getSeconds().toString().padStart(2, '0');
-    return `${hours}:${mins}:${secs}`;
+    return `${year}년 ${month}월 ${day}일 ${hours}:${mins}`;
   };
 
   return (
@@ -38,8 +40,8 @@ export default function Header({
       <div className="header-status-bar container">
         <div className="time-display-group">
           <div className="time-display">
-            <Clock size={14} className="clock-icon" />
-            <span className="clock-time">{formatClock(currentTime)}</span>
+            <Clock size={13} className="clock-icon" />
+            <span className="clock-time">{formatDateTime(currentTime)}</span>
             <span className={`day-badge ${dayInfo.isFriday ? 'friday' : dayInfo.isWeekend ? 'weekend' : 'weekday'}`}>
               {dayInfo.dayName}
             </span>
