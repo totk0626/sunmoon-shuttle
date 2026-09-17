@@ -276,9 +276,7 @@ export default function TimetableList({ route, currentTime, directionFilter = 't
                         )}
 
                         <td>
-                          {item.isNext ? (
-                            <span className="note-badge badge-next">다음 차편</span>
-                          ) : item.isStudentHall ? (
+                          {item.isStudentHall ? (
                             <span className="note-badge badge-student-hall">🏛️ 학생회관</span>
                           ) : item.note ? (
                             <span className="note-badge" style={{ backgroundColor: 'var(--bg-card)', color: 'var(--text-sub)', border: '1px solid var(--border-color)' }}>
