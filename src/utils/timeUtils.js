@@ -137,5 +137,8 @@ export function getUpcomingBuses(route, dateObj, directionFilter = 'to_school') 
 export function formatRemainingTime(diffMins) {
   if (diffMins < 0) return '출발 완료';
   if (diffMins === 0) return '지금 출발!';
-  return `${diffMins}분 후 출발`;
+  if (diffMins < 120) return `${diffMins}분 후 출발`;
+  const hours = Math.floor(diffMins / 60);
+  const mins = diffMins % 60;
+  return mins > 0 ? `${hours}시간 ${mins}분 후 출발` : `${hours}시간 후 출발`;
 }
