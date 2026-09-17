@@ -973,12 +973,16 @@ body {
   outline: none;
   cursor: pointer;
   box-shadow: var(--shadow-sm);
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
 
 [data-theme="dark"] .picker-wheel-select {
   background-color: var(--bg-card);
   color: var(--text-main);
   border-color: rgba(255, 255, 255, 0.25);
+  color-scheme: dark;
 }
 
 .picker-colon {
