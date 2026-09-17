@@ -94,7 +94,7 @@ export function getUpcomingBuses(route, dateObj, directionFilter = 'to_school') 
       // 하교 (캠퍼스 출발): 출발지는 아산캠퍼스 출발 시각
       depTimeStr = item.campusDep;
       const isHall = depTimeStr && isStudentCouncilTime(depTimeStr);
-      depLocation = isHall ? '아산캠퍼스 (학생회관 경유)' : '아산캠퍼스';
+      depLocation = '아산캠퍼스';
 
       destTimeStr = item.asanDep || item.cheonanDep || item.terminalDep || item.onyangDep || item.campusArr;
       destLocation = route.stops[1]?.name.replace(' 출발', '') || '역/터미널';

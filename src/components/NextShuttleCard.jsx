@@ -72,11 +72,11 @@ export default function NextShuttleCard({ selectedRoute, currentTime, directionF
 
             <div className="widget-dest-pill">
               <MapPin size={12} />
-              <span>{nextBus.depLocation} 출발</span>
+              <span>{nextBus.depLocation}</span>
               {nextBus.destLocation && (
                 <>
                   <ArrowRight size={11} style={{ margin: '0 2px' }} />
-                  <strong>{nextBus.destLocation} 도착</strong>
+                  <strong>{nextBus.destLocation}</strong>
                 </>
               )}
             </div>
