@@ -137,12 +137,14 @@ export default function TimetableList({ route, currentTime, directionFilter = 't
             border: '1px solid var(--border-color)',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
+            gap: '8px',
+            flexWrap: 'nowrap'
           }}>
-            <span>
-              현재 <strong>{isToSchool ? '등교 (역/터미널 승차 ➔ 학교행)' : '하교 (캠퍼스 승차 ➔ 귀가행)'}</strong> 기준 시간표입니다.
+            <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              현재 <strong>{isToSchool ? '등교' : '하교'}</strong> 기준 시간표
             </span>
-            <span style={{ color: 'var(--accent-green)', fontWeight: 800 }}>📍 승차 시간 기준 정렬</span>
+            <span style={{ color: 'var(--accent-green)', fontWeight: 800, whiteSpace: 'nowrap', flexShrink: 0 }}>📍 승차 시간 기준</span>
           </div>
 
           {/* Isolated Scroll Box for Table (No Horizontal Scroll Needed!) */}
@@ -153,10 +155,10 @@ export default function TimetableList({ route, currentTime, directionFilter = 't
                   <tr>
                     <th style={{ width: '30px' }}>순번</th>
                     <th className={!isToSchool ? 'th-boarding' : ''}>
-                      {!isToSchool ? '캠퍼스 (승차 📍)' : '캠퍼스 (회차)'}
+                      캠퍼스
                     </th>
                     <th className={isToSchool ? 'th-boarding' : ''}>
-                      {isToSchool ? '천안아산역 (승차 📍)' : '천안아산역'}
+                      천안아산역
                     </th>
                     <th>도착</th>
                     <th style={{ width: '85px' }}>특이사항</th>
@@ -166,10 +168,10 @@ export default function TimetableList({ route, currentTime, directionFilter = 't
                   <tr>
                     <th style={{ width: '30px' }}>순번</th>
                     <th className={!isToSchool ? 'th-boarding' : ''}>
-                      {!isToSchool ? '캠퍼스 (승차 📍)' : '캠퍼스 (회차)'}
+                      캠퍼스
                     </th>
                     <th className={isToSchool ? 'th-boarding' : ''}>
-                      {isToSchool ? '천안역 (승차 📍)' : '천안역'}
+                      천안역
                     </th>
                     <th>도착</th>
                     <th style={{ width: '85px' }}>특이사항</th>
@@ -179,10 +181,10 @@ export default function TimetableList({ route, currentTime, directionFilter = 't
                   <tr>
                     <th style={{ width: '30px' }}>순번</th>
                     <th className={!isToSchool ? 'th-boarding' : ''}>
-                      {!isToSchool ? '캠퍼스 (승차 📍)' : '캠퍼스 (회차)'}
+                      캠퍼스
                     </th>
                     <th className={isToSchool ? 'th-boarding' : ''}>
-                      {isToSchool ? '터미널 (승차 📍)' : '터미널'}
+                      터미널
                     </th>
                     <th>도착</th>
                     <th style={{ width: '85px' }}>특이사항</th>
@@ -192,11 +194,11 @@ export default function TimetableList({ route, currentTime, directionFilter = 't
                   <tr>
                     <th style={{ width: '26px' }}>순번</th>
                     <th className={!isToSchool ? 'th-boarding' : ''}>
-                      {!isToSchool ? '캠퍼스(승차📍)' : '캠퍼스'}
+                      캠퍼스
                     </th>
                     <th>주공</th>
                     <th className={isToSchool ? 'th-boarding' : ''}>
-                      {isToSchool ? '온양역(승차📍)' : '온양역'}
+                      온양역
                     </th>
                     <th>터미널</th>
                     <th>도착</th>

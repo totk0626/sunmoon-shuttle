@@ -662,8 +662,9 @@ body {
 }
 
 [data-theme="dark"] .acc-count-pill {
-  background-color: #ffffff;
-  color: #111111;
+  background-color: rgba(255, 255, 255, 0.15);
+  color: var(--text-main);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .fri-excluded-badge {
@@ -1051,6 +1052,15 @@ body {
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
 }
 
+[data-theme="dark"] .modal-primary-btn {
+  background-color: #ffffff;
+  color: #111111;
+}
+
+[data-theme="dark"] .modal-primary-btn:hover {
+  background-color: #e5e7eb;
+}
+
 .modal-reset-btn {
   width: 100%;
   padding: 10px;
@@ -1109,6 +1119,12 @@ body {
   background-color: var(--primary);
   color: #ffffff;
   border-color: var(--primary);
+}
+
+[data-theme="dark"] .conv-tab-btn-clean.active {
+  background-color: #ffffff;
+  color: #111111;
+  border-color: #ffffff;
 }
 
 .info-card-box {
@@ -1172,6 +1188,12 @@ body {
   border-radius: 6px;
   font-weight: 800;
   font-size: 0.75rem;
+}
+
+[data-theme="dark"] .holiday-date-tag {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: var(--text-main);
+  border: 1px solid rgba(255, 255, 255, 0.25);
 }
 
 .app-footer {

@@ -65,11 +65,11 @@ export default function ConvenienceModal({ isOpen, onClose }) {
                 </p>
               </div>
 
-              <div className="info-card-box blue-bg">
-                <div style={{ fontWeight: 800, marginBottom: 4, color: '#1e40af' }}>
+              <div className="info-card-box" style={{ borderLeft: '3px solid #3b82f6' }}>
+                <div style={{ fontWeight: 800, marginBottom: 4, color: 'var(--text-main)' }}>
                   🏛️ 학생회관 승강장 탑승 가능 시간대
                 </div>
-                <p style={{ fontSize: '0.82rem', color: '#1e3a8a' }}>
+                <p style={{ fontSize: '0.82rem', color: 'var(--text-sub)' }}>
                   학기 중 평일 <strong>13:30 ~ 15:30</strong> 및 <strong>19:30 ~ 막차까지</strong>
                 </p>
               </div>
@@ -94,10 +94,10 @@ export default function ConvenienceModal({ isOpen, onClose }) {
           {activeTab === 'fare' && (
             <div className="tab-pane">
               <div className="sheet-section-title"><CreditCard size={14} /> 결제 및 탑승 안내</div>
-              <div className="info-card-box blue-bg">
-                <div style={{ fontWeight: 800, marginBottom: 4, color: '#1e40af' }}>💳 교통카드 전용</div>
-                <p style={{ fontSize: '0.82rem', color: '#1e3a8a' }}>{GENERAL_INFO.payment}</p>
-                <div style={{ marginTop: 6, fontSize: '0.75rem', color: '#dc2626', fontWeight: 800, display: 'flex', alignItems: 'center', gap: 4 }}>
+              <div className="info-card-box" style={{ borderLeft: '3px solid #3b82f6' }}>
+                <div style={{ fontWeight: 800, marginBottom: 4, color: 'var(--text-main)' }}>💳 교통카드 전용</div>
+                <p style={{ fontSize: '0.82rem', color: 'var(--text-sub)' }}>{GENERAL_INFO.payment}</p>
+                <div style={{ marginTop: 6, fontSize: '0.75rem', color: 'var(--accent-red)', fontWeight: 800, display: 'flex', alignItems: 'center', gap: 4 }}>
                   <ShieldAlert size={12} /> 현금 결제 불가 (카드 전용)
                 </div>
               </div>
