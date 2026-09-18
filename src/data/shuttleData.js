@@ -48,10 +48,10 @@ export const ROUTES = [
       { id: 1, campusDep: '08:05', asanDep: '08:25', campusArr: '08:40', friOff: false, note: '' },
       { id: 2, campusDep: null, asanDep: '08:35', campusArr: '08:50', friOff: true, note: '금(X)' },
       { id: 3, campusDep: null, asanDep: '08:40', campusArr: '08:55', friOff: true, note: '금(X)' },
-      { id: 4, campusDep: null, asanDep: '08:45', campusArr: '09:00', friOff: false, note: '월-목 2대 운행' },
+      { id: 4, campusDep: null, asanDep: '08:45', campusArr: '09:00', friOff: false, note: '월~화 2대 운행' },
       { id: 5, campusDep: null, asanDep: '08:50', campusArr: '09:05', friOff: true, note: '금(X)' },
       { id: 6, campusDep: null, asanDep: '08:55', campusArr: '09:10', friOff: false, note: '' },
-      { id: 7, campusDep: null, asanDep: '09:00', campusArr: '09:15', friOff: false, note: '월-목 2대 운행' },
+      { id: 7, campusDep: null, asanDep: '09:00', campusArr: '09:15', friOff: false, note: '월~목 2대 운행' },
       { id: 8, campusDep: null, asanDep: '09:05', campusArr: '09:20', friOff: true, note: '금(X)' },
       { id: 9, campusDep: null, asanDep: '09:10', campusArr: '09:25', friOff: false, note: '' },
       { id: 10, campusDep: null, asanDep: '09:15', campusArr: '09:30', friOff: true, note: '금(X)' },
@@ -64,8 +64,8 @@ export const ROUTES = [
       { id: 17, campusDep: '11:25', asanDep: '11:45', campusArr: '12:00', friOff: true, note: '금(X)' },
       { id: 18, campusDep: '11:45', asanDep: '12:05', campusArr: '12:20', friOff: false, note: '' },
       { id: 19, campusDep: '12:15', asanDep: '12:35', campusArr: '12:50', friOff: true, note: '금(X)' },
-      { id: 20, campusDep: '12:35', asanDep: '12:55', campusArr: '13:10', friOff: false, note: '' },
-      { id: 21, campusDep: '13:10', asanDep: '13:30', campusArr: '13:45', friOff: true, note: '금(X)' },
+      { id: 20, campusDep: '12:35', asanDep: '12:55', campusArr: '13:10', friOff: true, note: '금(X)' },
+      { id: 21, campusDep: '13:10', asanDep: '13:30', campusArr: '13:45', friOff: false, note: '' },
       { id: 22, campusDep: '13:40', asanDep: '14:00', campusArr: '14:15', friOff: false, note: '' },
       { id: 23, campusDep: '13:50', asanDep: '14:10', campusArr: '14:25', friOff: true, note: '금(X)' },
       { id: 24, campusDep: '14:40', asanDep: '15:00', campusArr: '15:15', friOff: false, note: '' },
@@ -113,15 +113,15 @@ export const ROUTES = [
       { id: 'campusArr', name: '아산캠퍼스 도착', type: 'arr' }
     ],
     schedule: [
-      { id: 1, campusDep: null, cheonanDep: '07:40', campusArr: '08:45', friOff: false, note: '' },
-      { id: 2, campusDep: null, cheonanDep: '08:15', campusArr: '09:00', friOff: true, note: '금(X)' },
-      { id: 3, campusDep: null, cheonanDep: '08:30', campusArr: '09:10', friOff: false, note: '' },
+      { id: 1, campusDep: '07:40', cheonanDep: '08:15', campusArr: '08:45', friOff: false, note: '' },
+      { id: 2, campusDep: null, cheonanDep: '08:30', campusArr: '09:00', friOff: true, note: '금(X)' },
+      { id: 3, campusDep: null, cheonanDep: '08:40', campusArr: '09:10', friOff: false, note: '' },
       { id: 4, campusDep: null, cheonanDep: '08:45', campusArr: '09:15', friOff: true, note: '금(X)' },
       { id: 5, campusDep: null, cheonanDep: '08:50', campusArr: '09:05', friOff: false, note: '중간노선 (하이렉스파 출발)' },
       { id: 6, campusDep: null, cheonanDep: '08:50', campusArr: '09:20', friOff: false, note: '' },
       { id: 7, campusDep: null, cheonanDep: '09:00', campusArr: '09:30', friOff: true, note: '금(X)' },
       { id: 8, campusDep: null, cheonanDep: '09:05', campusArr: '09:35', friOff: false, note: '' },
-      { id: 9, campusDep: null, cheonanDep: '09:30', campusArr: '09:55', friOff: true, note: '금(X)' },
+      { id: 9, campusDep: null, cheonanDep: '09:30', campusArr: '09:55', friOff: false, note: '' },
       { id: 10, campusDep: '09:30', cheonanDep: '10:00', campusArr: '10:25', friOff: false, note: '' },
       { id: 11, campusDep: '10:00', cheonanDep: '10:30', campusArr: '10:55', friOff: true, note: '금(X)' },
       { id: 12, campusDep: '10:10', cheonanDep: '10:40', campusArr: '11:05', friOff: false, note: '' },
@@ -243,8 +243,8 @@ export const ROUTES = [
       { id: 3, campusDep: null, jugongDep: '8:40', onyangDep: '8:50', terminalDep: '8:55', campusArr: '9:20', friOff: false, note: '' },
       { id: 4, campusDep: '10:25', jugongDep: '경유', onyangDep: '10:55', terminalDep: '11:00', campusArr: '11:20', friOff: false, note: '' },
       { id: 5, campusDep: '15:30', jugongDep: '경유', onyangDep: '16:00', terminalDep: '16:05', campusArr: '16:25', friOff: false, note: '' },
-      { id: 6, campusDep: '17:30', jugongDep: '경유', onyangDep: '18:00', terminalDep: '18:05', campusArr: '18:25', friOff: false, note: '' },
-      { id: 7, campusDep: '18:30', jugongDep: '경유', onyangDep: '19:00', terminalDep: '19:05', campusArr: '19:25', friOff: true, note: '금(X)' }
+      { id: 6, campusDep: '17:30', jugongDep: '경유', onyangDep: '18:00', terminalDep: '18:05', campusArr: '18:25', friOff: true, note: '금(X)' },
+      { id: 7, campusDep: '18:30', jugongDep: '경유', onyangDep: '19:00', terminalDep: '19:05', campusArr: '19:25', friOff: false, note: '' }
     ]
   }
 ];
