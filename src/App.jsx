@@ -6,8 +6,12 @@ import TimetableList from './components/TimetableList';
 import TimeSimulator from './components/TimeSimulator';
 import ConvenienceModal from './components/ConvenienceModal';
 import { ROUTES } from './data/shuttleData';
+import { recordVisit } from './utils/analytics';
 
 export default function App() {
+  useEffect(() => {
+    recordVisit();
+  }, []);
   const [realTime, setRealTime] = useState(new Date());
   const [simulatedTime, setSimulatedTime] = useState(null);
   const [selectedRouteId, setSelectedRouteId] = useState('cheonan_asan_tangjeong');
