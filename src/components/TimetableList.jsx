@@ -78,19 +78,7 @@ export default function TimetableList({ route, currentTime, directionFilter = 't
 
   const isToSchool = directionFilter === 'to_school';
 
-  // Schedule badge text
-  let scheduleBadgeText = '평일 시간표';
-  if (dayInfo.isNoService) {
-    scheduleBadgeText = dayInfo.holidayRule ? `${dayInfo.holidayRule.name} (미운행)` : '미운행';
-  } else if (dayInfo.specialNotice) {
-    scheduleBadgeText = dayInfo.badgeText || '대체휴일 시간표';
-  } else if (dayInfo.isSaturday) {
-    scheduleBadgeText = '토요일 시간표';
-  } else if (dayInfo.isSunday) {
-    scheduleBadgeText = '일요일 시간표';
-  } else if (dayInfo.isFriday) {
-    scheduleBadgeText = '금요일 (금X 제외)';
-  }
+  const shortDayName = dayInfo.scheduleType === 'sunday' ? '일' : (dayInfo.dayName ? dayInfo.dayName.charAt(0) : '');
 
   return (
     <div className="timetable-accordion-container">
@@ -101,18 +89,12 @@ export default function TimetableList({ route, currentTime, directionFilter = 't
       >
         <div className="acc-title-group">
           <Calendar size={18} color="var(--primary)" />
-          <span>전체 시간표</span>
+          <span>전체 시간표 ({shortDayName})</span>
           {!dayInfo.isNoService && (
             <span className="acc-count-pill">
               {isToSchool ? '등교' : '하교'} 남은 차편 {remainingCount}/{validCount}회
             </span>
           )}
-          <span className="fri-excluded-badge" style={{
-            backgroundColor: dayInfo.isNoService ? 'rgba(239, 68, 68, 0.12)' : dayInfo.isWeekend ? 'rgba(249, 115, 22, 0.12)' : undefined,
-            color: dayInfo.isNoService ? '#ef4444' : dayInfo.isWeekend ? '#ea580c' : undefined
-          }}>
-            <ShieldCheck size={11} /> {scheduleBadgeText}
-          </span>
         </div>
 
         <div className="acc-arrow-badge">
