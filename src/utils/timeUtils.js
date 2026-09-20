@@ -1,3 +1,5 @@
+import { SPECIAL_SCHEDULE_RULES_2026 } from '../data/shuttleData';
+
 /**
  * timeUtils.js - 셔틀버스 시간 계산 및 필터링 유틸리티
  */
@@ -20,14 +22,100 @@ export function minutesToTimeString(totalMinutes) {
   return `${hStr}:${mStr}`;
 }
 
-export function getDayInfo(dateObj) {
+
+export function formatDateKey(dateObj) {
+  const y = dateObj.getFullYear();
+  const m = (dateObj.getMonth() + 1).toString().padStart(2, '0');
+  const d = dateObj.getDate().toString().padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+
+export function getScheduleInfo(dateObj, route = null) {
+  const dateKey = formatDateKey(dateObj);
   const day = dateObj.getDay();
   const daysKR = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
+  const dayName = daysKR[day];
+
+  // 1. 공휴일 및 특별 운행 규칙 확인
+  const matchedRule = SPECIAL_SCHEDULE_RULES_2026.find(rule => {
+    return dateKey >= rule.startDate && dateKey <= rule.endDate;
+  });
+
+  let scheduleType = 'weekday'; // 'weekday' | 'friday' | 'saturday' | 'sunday' | 'none'
+  let isNoService = false;
+  let noServiceReason = '';
+  let badgeText = dayName;
+  let specialNotice = '';
+
+  if (matchedRule) {
+    if (matchedRule.type === 'no_service') {
+      scheduleType = 'none';
+      isNoService = true;
+      noServiceReason = matchedRule.message;
+      badgeText = matchedRule.badgeText || matchedRule.name;
+      specialNotice = matchedRule.message;
+    } else if (matchedRule.type === 'sunday_schedule') {
+      scheduleType = 'sunday';
+      badgeText = matchedRule.badgeText || '대체휴일(일요운행)';
+      specialNotice = matchedRule.message;
+    }
+  } else {
+    // 일반 요일 판정
+    if (day === 0) {
+      scheduleType = 'sunday';
+      badgeText = '일요일';
+    } else if (day === 6) {
+      scheduleType = 'saturday';
+      badgeText = '토요일';
+    } else if (day === 5) {
+      scheduleType = 'friday';
+      badgeText = '금요일';
+    } else {
+      scheduleType = 'weekday';
+      badgeText = dayName;
+    }
+  }
+
+  // 2. 노선별 특수 조건 (온양/아산 노선은 주말 미운행)
+  if (route && route.id === 'onyang_asan' && (scheduleType === 'saturday' || scheduleType === 'sunday')) {
+    isNoService = true;
+    noServiceReason = '온양/아산 노선은 주말(토/일) 및 공휴일에 운행하지 않습니다.';
+  }
+
+  // 3. 해당 조건의 실제 운행 스케줄 리스트 가져오기
+  let activeSchedule = [];
+  if (!isNoService && route) {
+    if (scheduleType === 'saturday') {
+      activeSchedule = route.saturdaySchedule || [];
+    } else if (scheduleType === 'sunday') {
+      activeSchedule = route.sundaySchedule || [];
+    } else if (scheduleType === 'friday') {
+      activeSchedule = (route.schedule || []).filter(item => !item.friOff);
+    } else if (scheduleType === 'weekday') {
+      activeSchedule = route.schedule || [];
+    }
+  }
+
   return {
-    dayName: daysKR[day],
-    isFriday: day === 5,
-    isWeekend: day === 0 || day === 6
+    dateKey,
+    day,
+    dayName,
+    scheduleType,
+    isNoService,
+    noServiceReason,
+    badgeText,
+    specialNotice,
+    isFriday: scheduleType === 'friday',
+    isSaturday: scheduleType === 'saturday',
+    isSunday: scheduleType === 'sunday',
+    isWeekend: day === 0 || day === 6,
+    activeSchedule,
+    holidayRule: matchedRule || null
   };
+}
+
+export function getDayInfo(dateObj, route = null) {
+  return getScheduleInfo(dateObj, route);
 }
 
 export function isStudentCouncilTime(timeStr) {
@@ -60,17 +148,16 @@ export function getBoardingStopLocation(dateObj) {
 }
 
 export function getUpcomingBuses(route, dateObj, directionFilter = 'to_school') {
-  if (!route || !route.schedule) return [];
+  if (!route) return [];
 
-  const { isFriday } = getDayInfo(dateObj);
+  const scheduleInfo = getScheduleInfo(dateObj, route);
+  if (scheduleInfo.isNoService) return [];
+
   const currentMins = dateObj.getHours() * 60 + dateObj.getMinutes();
   const currentSecs = dateObj.getHours() * 3600 + dateObj.getMinutes() * 60 + dateObj.getSeconds();
 
-  // Friday filter: exclude friOff buses completely on Friday
-  const validTrips = route.schedule.filter(item => {
-    if (isFriday && item.friOff) return false;
-    return true;
-  });
+  const validTrips = scheduleInfo.activeSchedule;
+
 
   const processed = [];
 

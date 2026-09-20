@@ -1,35 +1,49 @@
 import React, { useState } from 'react';
-import { X, Clock, Check, RotateCcw } from 'lucide-react';
-import { getDayInfo } from '../utils/timeUtils';
+import { X, Clock, Calendar, Check, RotateCcw } from 'lucide-react';
+import { getScheduleInfo } from '../utils/timeUtils';
+
+const WEEKDAYS = [
+  { label: '월', day: 1 },
+  { label: '화', day: 2 },
+  { label: '수', day: 3 },
+  { label: '목', day: 4 },
+  { label: '금', day: 5 },
+  { label: '토', day: 6 },
+  { label: '일', day: 0 }
+];
 
 export default function TimeSimulator({ isOpen, onClose, currentTime, onSetSimulatedTime, onResetTime, isSimulated }) {
   if (!isOpen) return null;
 
-  const dayInfo = getDayInfo(currentTime);
-  // Initialize state once on modal open
+  // Initialize state with currentTime
+  const [selectedDate, setSelectedDate] = useState(() => new Date(currentTime));
   const [hours, setHours] = useState(() => currentTime.getHours());
   const [minutes, setMinutes] = useState(() => currentTime.getMinutes());
-  const [forceFriday, setForceFriday] = useState(() => dayInfo.isFriday);
 
-  const handleApply = (e) => {
-    if (e) e.preventDefault();
-    const newDate = new Date();
-    newDate.setHours(hours);
-    newDate.setMinutes(minutes);
-    newDate.setSeconds(0);
+  // Current simulation preview info
+  const previewDate = new Date(selectedDate);
+  previewDate.setHours(hours);
+  previewDate.setMinutes(minutes);
+  previewDate.setSeconds(0);
+  const previewInfo = getScheduleInfo(previewDate);
 
-    // If user explicitly toggled Friday rule testing
-    if (forceFriday) {
-      const currentDay = newDate.getDay();
-      const diffDays = 5 - currentDay; // 5 is Friday
-      newDate.setDate(newDate.getDate() + diffDays);
-    } else if (newDate.getDay() === 5) {
-      // If today is Friday but user turned off Friday rule, set to Monday
-      newDate.setDate(newDate.getDate() - 4);
+  const handleSelectDayOfWeek = (targetDay) => {
+    const nextDate = new Date(selectedDate);
+    const currentDay = nextDate.getDay();
+    const diff = targetDay - currentDay;
+    nextDate.setDate(nextDate.getDate() + diff);
+
+    // 요일 선택 시 추석 등 특수 연휴에 걸릴 경우, 사용자가 해당 요일의 정상 시간표를 바로 볼 수 있도록 평시 주간으로 자동 이동
+    const info = getScheduleInfo(nextDate);
+    if (info.isNoService && info.holidayRule) {
+      nextDate.setDate(nextDate.getDate() - 7);
+      const prevCheck = getScheduleInfo(nextDate);
+      if (prevCheck.isNoService && prevCheck.holidayRule) {
+        nextDate.setDate(nextDate.getDate() + 14);
+      }
     }
 
-    onSetSimulatedTime(newDate);
-    onClose();
+    setSelectedDate(nextDate);
   };
 
   const handleQuickPreset = (h, m) => {
@@ -37,22 +51,81 @@ export default function TimeSimulator({ isOpen, onClose, currentTime, onSetSimul
     setMinutes(m);
   };
 
+  const handleApply = (e) => {
+    if (e) e.preventDefault();
+    const finalDate = new Date(selectedDate);
+    finalDate.setHours(hours);
+    finalDate.setMinutes(minutes);
+    finalDate.setSeconds(0);
+
+    onSetSimulatedTime(finalDate);
+    onClose();
+  };
+
+  const currentDayOfWeek = selectedDate.getDay();
+
   return (
     <div className="modal-backdrop" onClick={onClose}>
       <div className="modal-sheet-clean" onClick={(e) => e.stopPropagation()}>
         <div className="modal-sheet-header">
           <div className="modal-sheet-title">
             <Clock size={20} color="var(--primary)" />
-            <span>출발 시간 조절</span>
+            <span>출발 요일 및 시간 조절</span>
           </div>
           <button type="button" className="modal-close-icon" onClick={onClose}>
             <X size={20} />
           </button>
         </div>
 
-        {/* Clock Picker Box (Vertical Wheel Select) */}
+        {/* Selected Date & Status Preview Banner */}
+        <div className="simulator-status-banner">
+          <div className="banner-date-text">
+            <Calendar size={14} style={{ color: 'var(--primary)' }} />
+            <span>
+              {previewInfo.dayName} {hours.toString().padStart(2, '0')}:{minutes.toString().padStart(2, '0')} 기준
+            </span>
+          </div>
+          <div className={`banner-badge ${previewInfo.isNoService ? 'no-service' : previewInfo.isWeekend ? 'weekend' : 'normal'}`}>
+            {previewInfo.isNoService ? (
+              <>🚫 {previewInfo.holidayRule ? previewInfo.holidayRule.name : '미운행'}</>
+            ) : previewInfo.specialNotice ? (
+              <>✨ {previewInfo.badgeText}</>
+            ) : previewInfo.isSaturday ? (
+              <>토요일 시간표</>
+            ) : previewInfo.isSunday ? (
+              <>일요일 시간표</>
+            ) : previewInfo.isFriday ? (
+              <>금요일 (금X 제외)</>
+            ) : (
+              <>평일 시간표</>
+            )}
+          </div>
+        </div>
+
+        {/* 1. Day of the Week Selector (월~일) */}
         <div className="sheet-section-title">
-          <Clock size={13} /> 출발 시간 설정 (시/분 선택)
+          <Calendar size={13} /> 요일 선택
+        </div>
+        <div className="weekday-selector-grid">
+          {WEEKDAYS.map(w => {
+            const isSelected = currentDayOfWeek === w.day;
+            const isWeekendDay = w.day === 0 || w.day === 6;
+            return (
+              <button
+                key={w.day}
+                type="button"
+                className={`weekday-chip ${isSelected ? 'active' : ''} ${isWeekendDay ? 'weekend' : ''}`}
+                onClick={() => handleSelectDayOfWeek(w.day)}
+              >
+                <span className="weekday-chip-name">{w.label}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* 2. Clock Picker Box (Vertical Wheel Select) */}
+        <div className="sheet-section-title" style={{ marginTop: '16px' }}>
+          <Clock size={13} /> 출발 시간 설정 (시/분)
         </div>
         <div className="clock-picker-box">
           <div className="picker-col">
@@ -88,29 +161,22 @@ export default function TimeSimulator({ isOpen, onClose, currentTime, onSetSimul
           </div>
         </div>
 
-        {/* Friday Toggle Option */}
-        <button
-          type="button"
-          className={`friday-check-btn ${forceFriday ? 'active' : ''}`}
-          onClick={() => setForceFriday(!forceFriday)}
-        >
-          <span>금요일 미운행 차편 자동 제외 {forceFriday ? '☑ 적용중' : '☐ 미적용'}</span>
-        </button>
-
         {/* Quick Preset Time Grid */}
-        <div className="sheet-section-title">빠른 시간 선택</div>
+        <div className="sheet-section-title" style={{ marginTop: '14px' }}>
+          빠른 시간 선택
+        </div>
         <div className="quick-time-grid">
           <button type="button" className="quick-time-chip" onClick={() => handleQuickPreset(8, 0)}>
             08:00
           </button>
-          <button type="button" className="quick-time-chip" onClick={() => handleQuickPreset(13, 30)}>
-            13:30
+          <button type="button" className="quick-time-chip" onClick={() => handleQuickPreset(12, 0)}>
+            12:00
           </button>
-          <button type="button" className="quick-time-chip" onClick={() => handleQuickPreset(17, 30)}>
-            17:30
+          <button type="button" className="quick-time-chip" onClick={() => handleQuickPreset(16, 0)}>
+            16:00
           </button>
-          <button type="button" className="quick-time-chip" onClick={() => handleQuickPreset(21, 10)}>
-            21:10
+          <button type="button" className="quick-time-chip" onClick={() => handleQuickPreset(18, 20)}>
+            18:20
           </button>
         </div>
 
@@ -119,8 +185,9 @@ export default function TimeSimulator({ isOpen, onClose, currentTime, onSetSimul
           type="button"
           className="modal-primary-btn"
           onClick={handleApply}
+          style={{ marginTop: '16px' }}
         >
-          <Check size={18} /> 출발 시간 적용하기
+          <Check size={18} /> 설정된 요일/시간 적용하기
         </button>
 
         {isSimulated && (
@@ -132,7 +199,7 @@ export default function TimeSimulator({ isOpen, onClose, currentTime, onSetSimul
               onClose();
             }}
           >
-            <RotateCcw size={14} /> 실제 시간으로 복원
+            <RotateCcw size={14} /> 실제 현재 시간으로 복원
           </button>
         )}
       </div>

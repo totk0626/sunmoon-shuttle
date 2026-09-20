@@ -1227,3 +1227,223 @@ body {
   color: var(--text-muted);
   text-align: center;
 }
+
+/* =========================================
+   SIMULATOR STATUS BANNER & WEEKDAY SELECTOR
+   ========================================= */
+.simulator-status-banner {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.banner-date-text {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 800;
+  font-size: 0.88rem;
+  color: var(--text-main);
+}
+
+.banner-badge {
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.banner-badge.no-service {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+
+.banner-badge.weekend {
+  background-color: rgba(234, 88, 12, 0.15);
+  color: #ea580c;
+}
+
+.banner-badge.normal {
+  background-color: rgba(37, 99, 235, 0.15);
+  color: #2563eb;
+}
+
+.weekday-selector-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.weekday-chip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 2px;
+  border-radius: var(--radius-md);
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.weekday-chip:hover {
+  border-color: var(--primary);
+}
+
+.weekday-chip-name {
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: var(--text-main);
+}
+
+.weekday-chip.weekend .weekday-chip-name {
+  color: #ea580c;
+}
+
+.weekday-chip.active {
+  background-color: var(--primary);
+  border-color: var(--primary);
+  box-shadow: 0 3px 10px rgba(37, 99, 235, 0.3);
+}
+
+.weekday-chip.active .weekday-chip-name {
+  color: #ffffff;
+}
+
+/* =========================================
+   NOTICE ACCORDION (공지 및 특이사항)
+   ========================================= */
+.notice-acc-banner {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background-color: rgba(245, 158, 11, 0.1);
+  border: 1px dashed rgba(245, 158, 11, 0.4);
+  color: var(--text-main);
+  font-size: 0.8rem;
+  margin-bottom: 12px;
+}
+
+.notice-holiday-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.notice-holiday-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
+  transition: transform 0.15s ease;
+}
+
+.notice-holiday-card.special {
+  border-color: rgba(37, 99, 235, 0.35);
+  background: linear-gradient(135deg, var(--bg-card) 0%, rgba(37, 99, 235, 0.05) 100%);
+}
+
+.nh-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nh-title {
+  font-size: 0.88rem;
+  font-weight: 900;
+  color: var(--text-main);
+}
+
+.nh-badge {
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+
+.nh-badge.off {
+  background-color: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+}
+
+.nh-badge.special {
+  background-color: rgba(37, 99, 235, 0.15);
+  color: #2563eb;
+}
+
+.nh-period {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.nh-desc {
+  font-size: 0.8rem;
+  color: var(--text-sub);
+  margin-top: 4px;
+  font-weight: 600;
+}
+
+.notice-route-notes {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.78rem;
+  margin-bottom: 12px;
+}
+
+.route-note-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-sub);
+}
+
+.notice-contact-box {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nc-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.nc-phone-btn {
+  background-color: var(--primary);
+  color: #ffffff;
+  padding: 6px 14px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 900;
+  font-size: 0.84rem;
+  transition: opacity 0.2s ease;
+}
+
+.nc-phone-btn:hover {
+  opacity: 0.9;
+}
+

@@ -87,6 +87,20 @@ export const ROUTES = [
       { id: 40, campusDep: '19:45', asanDep: '20:05', campusArr: '20:20', friOff: false, note: '' },
       { id: 41, campusDep: '20:45', asanDep: '21:05', campusArr: '21:20', friOff: false, note: '' },
       { id: 42, campusDep: '21:15', asanDep: '21:35', campusArr: '21:50', friOff: false, note: '' }
+    ],
+    saturdaySchedule: [
+      { id: 1, campusDep: '08:00', asanDep: '08:20', campusArr: '08:35', note: '' },
+      { id: 2, campusDep: '12:00', asanDep: '12:20', campusArr: '12:35', note: '' },
+      { id: 3, campusDep: '16:10', asanDep: '16:30', campusArr: '16:45', note: '' },
+      { id: 4, campusDep: '18:20', asanDep: '18:40', campusArr: '18:55', note: '' }
+    ],
+    sundaySchedule: [
+      { id: 1, campusDep: '09:00', asanDep: '09:20', campusArr: '09:35', note: '' },
+      { id: 2, campusDep: '12:00', asanDep: '12:20', campusArr: '12:35', note: '' },
+      { id: 3, campusDep: '16:10', asanDep: '16:30', campusArr: '16:45', note: '' },
+      { id: 4, campusDep: '18:20', asanDep: '18:40', campusArr: '18:55', note: '' },
+      { id: 5, campusDep: '19:10', asanDep: '19:30', campusArr: '19:45', note: '' },
+      { id: 6, campusDep: '20:00', asanDep: '20:20', campusArr: '20:35', note: '' }
     ]
   },
   {
@@ -146,6 +160,19 @@ export const ROUTES = [
       { id: 31, campusDep: '19:30', cheonanDep: '19:55', campusArr: '20:20', friOff: false, note: '' },
       { id: 32, campusDep: '20:30', cheonanDep: '20:55', campusArr: '21:20', friOff: false, note: '' },
       { id: 33, campusDep: '21:20', cheonanDep: '21:45', campusArr: '22:10', friOff: true, note: '금(X)' }
+    ],
+    saturdaySchedule: [
+      { id: 1, campusDep: '08:00', cheonanDep: '08:30', campusArr: '09:00', note: '' },
+      { id: 2, campusDep: '12:00', cheonanDep: '12:30', campusArr: '13:00', note: '' },
+      { id: 3, campusDep: '16:00', cheonanDep: '16:30', campusArr: '17:00', note: '' },
+      { id: 4, campusDep: '18:10', cheonanDep: '18:40', campusArr: '19:10', note: '' }
+    ],
+    sundaySchedule: [
+      { id: 1, campusDep: '09:00', cheonanDep: '09:30', campusArr: '10:00', note: '' },
+      { id: 2, campusDep: '12:00', cheonanDep: '12:30', campusArr: '13:00', note: '' },
+      { id: 3, campusDep: '16:00', cheonanDep: '16:30', campusArr: '17:00', note: '' },
+      { id: 4, campusDep: '18:10', cheonanDep: '18:40', campusArr: '19:10', note: '' },
+      { id: 5, campusDep: '19:00', cheonanDep: '19:30', campusArr: '20:00', note: '' }
     ]
   },
   {
@@ -210,6 +237,19 @@ export const ROUTES = [
       { id: 36, campusDep: '19:40', terminalDep: '20:10', campusArr: '20:40', friOff: false, note: '' },
       { id: 37, campusDep: '20:40', terminalDep: '21:10', campusArr: '21:40', friOff: false, note: '' },
       { id: 38, campusDep: '21:30', terminalDep: '22:00', campusArr: '22:30', friOff: true, note: '금(X)' }
+    ],
+    saturdaySchedule: [
+      { id: 1, campusDep: '08:00', terminalDep: '08:30', campusArr: '09:00', note: '' },
+      { id: 2, campusDep: '12:00', terminalDep: '12:30', campusArr: '13:00', note: '' },
+      { id: 3, campusDep: '16:00', terminalDep: '16:30', campusArr: '17:00', note: '' },
+      { id: 4, campusDep: '18:00', terminalDep: '18:30', campusArr: '19:00', note: '' }
+    ],
+    sundaySchedule: [
+      { id: 1, campusDep: '09:00', terminalDep: '09:30', campusArr: '10:00', note: '' },
+      { id: 2, campusDep: '12:00', terminalDep: '12:30', campusArr: '13:00', note: '' },
+      { id: 3, campusDep: '16:00', terminalDep: '16:30', campusArr: '17:00', note: '' },
+      { id: 4, campusDep: '18:00', terminalDep: '18:30', campusArr: '19:00', note: '' },
+      { id: 5, campusDep: '19:30', terminalDep: '20:00', campusArr: '20:30', note: '' }
     ]
   },
   {
@@ -245,6 +285,53 @@ export const ROUTES = [
       { id: 5, campusDep: '15:30', jugongDep: '경유', onyangDep: '16:00', terminalDep: '16:05', campusArr: '16:25', friOff: false, note: '' },
       { id: 6, campusDep: '17:30', jugongDep: '경유', onyangDep: '18:00', terminalDep: '18:05', campusArr: '18:25', friOff: true, note: '금(X)' },
       { id: 7, campusDep: '18:30', jugongDep: '경유', onyangDep: '19:00', terminalDep: '19:05', campusArr: '19:25', friOff: false, note: '' }
-    ]
+    ],
+    saturdaySchedule: [], // 주말 운행 없음
+    sundaySchedule: []    // 주말 운행 없음
   }
 ];
+
+// 2026학년도 공휴일 및 특별 운행 규칙
+export const SPECIAL_SCHEDULE_RULES_2026 = [
+  {
+    startDate: '2026-09-24',
+    endDate: '2026-09-26',
+    name: '추석 연휴',
+    type: 'no_service',
+    badgeText: '추석 연휴',
+    message: '추석 연휴 기간으로 셔틀버스를 운행하지 않습니다.'
+  },
+  {
+    startDate: '2026-10-03',
+    endDate: '2026-10-04',
+    name: '개천절 연휴',
+    type: 'no_service',
+    badgeText: '개천절 연휴',
+    message: '개천절 연휴 기간으로 셔틀버스를 운행하지 않습니다.'
+  },
+  {
+    startDate: '2026-10-05',
+    endDate: '2026-10-05',
+    name: '개천절 대체휴일',
+    type: 'sunday_schedule',
+    badgeText: '대체휴일(일요운행)',
+    message: '개천절 대체휴일로 일요일 시간표로 운행합니다.'
+  },
+  {
+    startDate: '2026-10-09',
+    endDate: '2026-10-09',
+    name: '한글날',
+    type: 'no_service',
+    badgeText: '한글날',
+    message: '한글날 공휴일로 셔틀버스를 운행하지 않습니다.'
+  },
+  {
+    startDate: '2026-10-28',
+    endDate: '2026-10-28',
+    name: '개교기념일',
+    type: 'no_service',
+    badgeText: '개교기념일',
+    message: '개교기념일로 셔틀버스를 운행하지 않습니다.'
+  }
+];
+

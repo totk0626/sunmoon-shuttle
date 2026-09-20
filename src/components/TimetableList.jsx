@@ -6,16 +6,13 @@ export default function TimetableList({ route, currentTime, directionFilter = 't
   const [isExpanded, setIsExpanded] = useState(false);
   const [hidePassed, setHidePassed] = useState(true);
 
-  const dayInfo = getDayInfo(currentTime);
+  const dayInfo = getDayInfo(currentTime, route);
   const currentMins = currentTime.getHours() * 60 + currentTime.getMinutes();
 
-  if (!route || !route.schedule) return null;
+  if (!route) return null;
 
-  // Rule 1: Exclude friOff trips completely on Fridays
-  let list = route.schedule;
-  if (dayInfo.isFriday) {
-    list = list.filter(item => !item.friOff);
-  }
+  // Rule: Use activeSchedule determined by day and holiday rules
+  let list = dayInfo.activeSchedule || [];
 
   // Calculate passed status based on the SELECTED DIRECTION
   // 등교 (to_school): 역/터미널 출발 시각 기준!
@@ -47,7 +44,8 @@ export default function TimetableList({ route, currentTime, directionFilter = 't
     }
 
     // Identify if this trip stops by Student Council Building (학생회관 승강장 경유)
-    const isStudentHall = item.campusDep && isStudentCouncilTime(item.campusDep);
+    // 주말에는 학생회관 경유 없음 (학기 중 평일만)
+    const isStudentHall = !dayInfo.isWeekend && item.campusDep && isStudentCouncilTime(item.campusDep);
 
     return {
       ...item,
@@ -80,6 +78,20 @@ export default function TimetableList({ route, currentTime, directionFilter = 't
 
   const isToSchool = directionFilter === 'to_school';
 
+  // Schedule badge text
+  let scheduleBadgeText = '평일 시간표';
+  if (dayInfo.isNoService) {
+    scheduleBadgeText = dayInfo.holidayRule ? `${dayInfo.holidayRule.name} (미운행)` : '미운행';
+  } else if (dayInfo.specialNotice) {
+    scheduleBadgeText = dayInfo.badgeText || '대체휴일 시간표';
+  } else if (dayInfo.isSaturday) {
+    scheduleBadgeText = '토요일 시간표';
+  } else if (dayInfo.isSunday) {
+    scheduleBadgeText = '일요일 시간표';
+  } else if (dayInfo.isFriday) {
+    scheduleBadgeText = '금요일 (금X 제외)';
+  }
+
   return (
     <div className="timetable-accordion-container">
       <button
@@ -90,14 +102,17 @@ export default function TimetableList({ route, currentTime, directionFilter = 't
         <div className="acc-title-group">
           <Calendar size={18} color="var(--primary)" />
           <span>전체 시간표</span>
-          <span className="acc-count-pill">
-            {isToSchool ? '등교' : '하교'} 남은 차편 {remainingCount}/{validCount}회
-          </span>
-          {dayInfo.isFriday && (
-            <span className="fri-excluded-badge">
-              <ShieldCheck size={11} /> 금(X) 제외됨
+          {!dayInfo.isNoService && (
+            <span className="acc-count-pill">
+              {isToSchool ? '등교' : '하교'} 남은 차편 {remainingCount}/{validCount}회
             </span>
           )}
+          <span className="fri-excluded-badge" style={{
+            backgroundColor: dayInfo.isNoService ? 'rgba(239, 68, 68, 0.12)' : dayInfo.isWeekend ? 'rgba(249, 115, 22, 0.12)' : undefined,
+            color: dayInfo.isNoService ? '#ef4444' : dayInfo.isWeekend ? '#ea580c' : undefined
+          }}>
+            <ShieldCheck size={11} /> {scheduleBadgeText}
+          </span>
         </div>
 
         <div className="acc-arrow-badge">
@@ -108,25 +123,41 @@ export default function TimetableList({ route, currentTime, directionFilter = 't
 
       <div className={`timetable-accordion-wrapper ${isExpanded ? 'expanded' : ''}`}>
         <div className="timetable-accordion-body">
-          {/* Boarding Location Legend & Filter Bar */}
-          <div className="timetable-legend-row">
-            <div className="boarding-legend-group">
-              <span className="legend-chip legend-student-hall">
-                <MapPin size={11} /> 학생회관 경유 (13:30~15:30 / 19:30~막차)
-              </span>
+          {dayInfo.isNoService ? (
+            <div style={{ padding: '24px 16px', textAlign: 'center', color: 'var(--text-muted)' }}>
+              <div style={{ fontSize: '1.2rem', marginBottom: '8px' }}>🚫</div>
+              <strong style={{ color: 'var(--text-main)', display: 'block', marginBottom: '4px' }}>
+                {dayInfo.holidayRule ? `${dayInfo.holidayRule.name} 셔틀버스 운행 없음` : '운행 없음'}
+              </strong>
+              <span style={{ fontSize: '0.85rem' }}>{dayInfo.noServiceReason}</span>
             </div>
+          ) : (
+            <>
+              {/* Boarding Location Legend & Filter Bar */}
+              <div className="timetable-legend-row">
+                <div className="boarding-legend-group">
+                  {!dayInfo.isWeekend ? (
+                    <span className="legend-chip legend-student-hall">
+                      <MapPin size={11} /> 학생회관 경유 (13:30~15:30 / 19:30~막차)
+                    </span>
+                  ) : route.id === 'cheonan_asan_tangjeong' ? (
+                    <span className="legend-chip" style={{ backgroundColor: 'rgba(37, 99, 235, 0.1)', color: '#2563eb' }}>
+                      <MapPin size={11} /> 하교방향 전체 탕정역 경유
+                    </span>
+                  ) : null}
+                </div>
 
-            <button
-              type="button"
-              className={`passed-toggle-btn ${hidePassed ? 'active' : ''}`}
-              onClick={() => setHidePassed(!hidePassed)}
-            >
-              {hidePassed ? <EyeOff size={13} /> : <Eye size={13} />}
-              <span>{hidePassed ? '지나간 차편 숨김 중' : '지나간 차편 포함'}</span>
-            </button>
-          </div>
+                <button
+                  type="button"
+                  className={`passed-toggle-btn ${hidePassed ? 'active' : ''}`}
+                  onClick={() => setHidePassed(!hidePassed)}
+                >
+                  {hidePassed ? <EyeOff size={13} /> : <Eye size={13} />}
+                  <span>{hidePassed ? '지나간 차편 숨김 중' : '지나간 차편 포함'}</span>
+                </button>
+              </div>
 
-          {/* Direction-specific Guidance Banner */}
+              {/* Direction-specific Guidance Banner */}
           <div style={{
             fontSize: '0.74rem',
             padding: '5px 10px',
@@ -293,6 +324,8 @@ export default function TimetableList({ route, currentTime, directionFilter = 't
               </tbody>
             </table>
           </div>
+          </>
+          )}
         </div>
       </div>
     </div>

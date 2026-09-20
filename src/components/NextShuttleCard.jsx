@@ -8,7 +8,7 @@ export default function NextShuttleCard({ selectedRoute, currentTime, directionF
   const upcomingList = getUpcomingBuses(selectedRoute, currentTime, directionFilter);
   const nextBus = upcomingList[0];
   const subsequentBuses = upcomingList.slice(1, 3);
-  const dayInfo = getDayInfo(currentTime);
+  const dayInfo = getDayInfo(currentTime, selectedRoute);
 
   useEffect(() => {
     if (!nextBus) return;
@@ -43,13 +43,17 @@ export default function NextShuttleCard({ selectedRoute, currentTime, directionF
 
   return (
     <div className="next-shuttle-widget-wrap">
-      {dayInfo.isWeekend ? (
+      {dayInfo.isNoService ? (
         <div className="end-service-widget">
           <AlertTriangle size={32} color="#f59e0b" style={{ margin: '0 auto 8px auto' }} />
-          <div className="end-service-title">주말 / 공휴일 미운행 🚫</div>
-          <div className="end-service-desc">주말에는 셔틀버스가 운행하지 않습니다.</div>
+          <div className="end-service-title">
+            {dayInfo.holidayRule ? `${dayInfo.holidayRule.name} 셔틀 미운행 🚫` : '셔틀버스 미운행 🚫'}
+          </div>
+          <div className="end-service-desc">
+            {dayInfo.noServiceReason || '해당 날짜에는 셔틀버스가 운행하지 않습니다.'}
+          </div>
           <button type="button" className="modal-reset-btn" onClick={onOpenSimulator} style={{ width: 'auto', display: 'inline-flex', padding: '8px 16px' }}>
-            <Sliders size={14} /> 시간 조절해보기
+            <Sliders size={14} /> 다른 날짜/시각 설정해보기
           </button>
         </div>
       ) : !nextBus ? (
@@ -109,11 +113,15 @@ export default function NextShuttleCard({ selectedRoute, currentTime, directionF
               )}
             </div>
 
-            {dayInfo.isFriday && (
+            {dayInfo.specialNotice ? (
+              <div className="friday-notice-strip" style={{ backgroundColor: 'rgba(59, 130, 246, 0.15)', color: '#2563eb' }}>
+                <ShieldCheck size={12} /> {dayInfo.specialNotice}
+              </div>
+            ) : dayInfo.isFriday ? (
               <div className="friday-notice-strip">
                 <ShieldCheck size={12} /> 금요일 미운행 차편 자동 제외 적용중
               </div>
-            )}
+            ) : null}
           </div>
 
           {/* Subsequent Next Trips Mini Grid */}
