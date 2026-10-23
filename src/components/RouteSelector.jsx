@@ -1,6 +1,6 @@
 import React from 'react';
 import { ROUTES } from '../data/shuttleData';
-import { Navigation, Clock, AlertTriangle } from 'lucide-react';
+import { Navigation, Clock } from 'lucide-react';
 
 export default function RouteSelector({
   selectedRouteId,

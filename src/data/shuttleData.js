@@ -1,4 +1,5 @@
 // 2026-2학기 선문대학교 셔틀버스 시간표 데이터 (2026.9.1 ~ 12.14)
+export const SCHEDULE_PERIOD = { startDate: '2026-09-01', endDate: '2026-12-14' };
 
 export const HOLIDAY_NOTICES = [
   { title: '추석 연휴', date: '9.24(목) ~ 9.26(토)', note: '셔틀버스 운행 없음', type: 'off' },
@@ -131,7 +132,7 @@ export const ROUTES = [
       { id: 2, campusDep: null, cheonanDep: '08:30', campusArr: '09:00', friOff: true, note: '금(X)' },
       { id: 3, campusDep: null, cheonanDep: '08:40', campusArr: '09:10', friOff: false, note: '' },
       { id: 4, campusDep: null, cheonanDep: '08:45', campusArr: '09:15', friOff: true, note: '금(X)' },
-      { id: 5, campusDep: null, cheonanDep: '08:50', campusArr: '09:05', friOff: false, note: '중간노선 (하이렉스파 출발)' },
+      { id: 5, campusDep: null, cheonanDep: '08:50', campusArr: '09:05', boardingLocation: '하이렉스파', friOff: false, note: '중간노선 (하이렉스파 출발)' },
       { id: 6, campusDep: null, cheonanDep: '08:50', campusArr: '09:20', friOff: false, note: '' },
       { id: 7, campusDep: null, cheonanDep: '09:00', campusArr: '09:30', friOff: true, note: '금(X)' },
       { id: 8, campusDep: null, cheonanDep: '09:05', campusArr: '09:35', friOff: false, note: '' },
@@ -207,7 +208,7 @@ export const ROUTES = [
       { id: 6, campusDep: null, terminalDep: '08:40', campusArr: '09:20', friOff: true, note: '금(X)' },
       { id: 7, campusDep: null, terminalDep: '08:45', campusArr: '09:25', friOff: false, note: '' },
       { id: 8, campusDep: null, terminalDep: '08:50', campusArr: '09:30', friOff: true, note: '금(X)' },
-      { id: 9, campusDep: null, terminalDep: '08:55', campusArr: '09:10', friOff: false, note: '중간노선 (두정동 맥도날드 출발)' },
+      { id: 9, campusDep: null, terminalDep: '08:55', campusArr: '09:10', boardingLocation: '두정동 맥도날드', friOff: false, note: '중간노선 (두정동 맥도날드 출발)' },
       { id: 10, campusDep: null, terminalDep: '09:30', campusArr: '10:00', friOff: false, note: '' },
       { id: 11, campusDep: '09:30', terminalDep: '10:00', campusArr: '10:30', friOff: false, note: '' },
       { id: 12, campusDep: '10:00', terminalDep: '10:30', campusArr: '11:00', friOff: true, note: '금(X)' },

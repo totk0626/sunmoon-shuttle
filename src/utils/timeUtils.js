@@ -1,4 +1,4 @@
-import { SPECIAL_SCHEDULE_RULES_2026 } from '../data/shuttleData';
+import { SPECIAL_SCHEDULE_RULES_2026, SCHEDULE_PERIOD } from '../data/shuttleData.js';
 
 /**
  * timeUtils.js - 셔틀버스 시간 계산 및 필터링 유틸리티
@@ -35,6 +35,7 @@ export function getScheduleInfo(dateObj, route = null) {
   const day = dateObj.getDay();
   const daysKR = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
   const dayName = daysKR[day];
+  const isOutsideTerm = dateKey < SCHEDULE_PERIOD.startDate || dateKey > SCHEDULE_PERIOD.endDate;
 
   // 1. 공휴일 및 특별 운행 규칙 확인
   const matchedRule = SPECIAL_SCHEDULE_RULES_2026.find(rule => {
@@ -47,7 +48,11 @@ export function getScheduleInfo(dateObj, route = null) {
   let badgeText = dayName;
   let specialNotice = '';
 
-  if (matchedRule) {
+  if (isOutsideTerm) {
+    scheduleType = 'none';
+    badgeText = '시간표 확인 필요';
+    specialNotice = `현재 시간표의 적용 기간은 ${SCHEDULE_PERIOD.startDate} ~ ${SCHEDULE_PERIOD.endDate}입니다. 해당 날짜의 최신 시간표를 확인해 주세요.`;
+  } else if (matchedRule) {
     if (matchedRule.type === 'no_service') {
       scheduleType = 'none';
       isNoService = true;
@@ -101,6 +106,7 @@ export function getScheduleInfo(dateObj, route = null) {
     day,
     dayName,
     scheduleType,
+    isOutsideTerm,
     isNoService,
     noServiceReason,
     badgeText,
@@ -147,6 +153,14 @@ export function getBoardingStopLocation(dateObj) {
   };
 }
 
+export function getStationStop(route, item) {
+  const stops = route.id === 'onyang_asan'
+    ? [...route.stops.filter(stop => stop.id === 'onyangDep'), ...route.stops.filter(stop => stop.id !== 'onyangDep')]
+    : route.stops;
+  const stop = stops.find(stop => stop.type === 'waypoint' && timeStringToMinutes(item[stop.id]) !== null);
+  return stop ? { name: stop.name.replace(' 출발', ''), time: item[stop.id] } : { name: '역/터미널', time: null };
+}
+
 export function getUpcomingBuses(route, dateObj, directionFilter = 'to_school') {
   if (!route) return [];
 
@@ -162,6 +176,7 @@ export function getUpcomingBuses(route, dateObj, directionFilter = 'to_school') 
   const processed = [];
 
   validTrips.forEach(item => {
+    const stationStop = getStationStop(route, item);
     let depTimeStr = null;
     let depLocation = '아산캠';
     let destTimeStr = null;
@@ -169,23 +184,17 @@ export function getUpcomingBuses(route, dateObj, directionFilter = 'to_school') 
 
     if (directionFilter === 'to_school') {
       // 등교 (캠퍼스행): 출발지는 역/터미널 출발 시각
-      if (route.id === 'onyang_asan') {
-        depTimeStr = item.onyangDep || item.terminalDep || item.jugongDep;
-        depLocation = '온양온천역';
-      } else {
-        depTimeStr = item.asanDep || item.cheonanDep || item.terminalDep || item.onyangDep;
-        depLocation = route.stops[1]?.name.replace(' 출발', '') || '역/터미널';
-      }
+      depTimeStr = stationStop.time;
+      depLocation = item.boardingLocation || stationStop.name;
       destTimeStr = item.campusArr;
       destLocation = '아산캠';
     } else {
       // 하교 (캠퍼스 출발): 출발지는 아산캠퍼스 출발 시각
       depTimeStr = item.campusDep;
-      const isHall = depTimeStr && isStudentCouncilTime(depTimeStr);
       depLocation = '아산캠';
 
-      destTimeStr = item.asanDep || item.cheonanDep || item.terminalDep || item.onyangDep || item.campusArr;
-      destLocation = route.stops[1]?.name.replace(' 출발', '') || '역/터미널';
+      destTimeStr = stationStop.time;
+      destLocation = stationStop.name;
     }
 
     if (!depTimeStr) return;
@@ -207,6 +216,10 @@ export function getUpcomingBuses(route, dateObj, directionFilter = 'to_school') 
       depLocation,
       destTimeStr,
       destLocation,
+      // 원본의 역 출발 시각을 도착 시각으로 단정하지 않는다.
+      destTimeLabel: directionFilter === 'to_school' ? '도착' : '정류장 출발 기준',
+      boardingNotice: directionFilter === 'to_school' ? ''
+        : `공대 승강장 출발${['weekday', 'friday'].includes(scheduleInfo.scheduleType) && isStudentCouncilTime(depTimeStr) ? ' · 학생회관 경유 (표시 시각은 공대 출발 기준)' : ''}`,
       depMins,
       diffMins,
       diffSecs,

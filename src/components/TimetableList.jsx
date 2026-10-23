@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { ChevronDown, ChevronUp, Eye, EyeOff, Calendar, ShieldCheck, MapPin } from 'lucide-react';
-import { timeStringToMinutes, getDayInfo, isStudentCouncilTime } from '../utils/timeUtils';
+import { ChevronDown, Eye, EyeOff, Calendar, MapPin } from 'lucide-react';
+import { timeStringToMinutes, getDayInfo, isStudentCouncilTime, getStationStop } from '../utils/timeUtils';
 
 export default function TimetableList({ route, currentTime, directionFilter = 'to_school' }) {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -21,11 +21,7 @@ export default function TimetableList({ route, currentTime, directionFilter = 't
     let relevantDepTimeStr = null;
 
     if (directionFilter === 'to_school') {
-      if (route.id === 'onyang_asan') {
-        relevantDepTimeStr = item.onyangDep || item.terminalDep || item.jugongDep;
-      } else {
-        relevantDepTimeStr = item.asanDep || item.cheonanDep || item.terminalDep || item.onyangDep;
-      }
+      relevantDepTimeStr = getStationStop(route, item).time;
     } else {
       relevantDepTimeStr = item.campusDep;
     }
@@ -40,12 +36,12 @@ export default function TimetableList({ route, currentTime, directionFilter = 't
       isPassed = true;
     } else if (depMins !== null) {
       diffMins = depMins - currentMins;
-      if (diffMins < 0) isPassed = true;
+      isPassed = diffMins * 60 - currentTime.getSeconds() < -20;
     }
 
     // Identify if this trip stops by Student Council Building (학생회관 승강장 경유)
     // 주말에는 학생회관 경유 없음 (학기 중 평일만)
-    const isStudentHall = !dayInfo.isWeekend && item.campusDep && isStudentCouncilTime(item.campusDep);
+    const isStudentHall = ['weekday', 'friday'].includes(dayInfo.scheduleType) && item.campusDep && isStudentCouncilTime(item.campusDep);
 
     return {
       ...item,
@@ -58,17 +54,11 @@ export default function TimetableList({ route, currentTime, directionFilter = 't
   });
 
   // Mark the single next upcoming trip FOR THE CURRENT DIRECTION
-  let foundNext = false;
-  processedList = processedList.map(item => {
-    if (!foundNext && item.diffMins !== null && item.diffMins >= 0) {
-      foundNext = true;
-      return { ...item, isNext: true };
-    }
-    return item;
-  });
+  const nextIndex = processedList.findIndex(item => item.diffMins !== null && !item.isPassed);
+  processedList = processedList.map((item, index) => ({ ...item, isNext: index === nextIndex }));
 
   const validCount = processedList.filter(i => i.relevantDepTimeStr !== null).length;
-  const remainingCount = processedList.filter(i => i.diffMins !== null && i.diffMins >= 0).length;
+  const remainingCount = processedList.filter(i => i.diffMins !== null && !i.isPassed).length;
 
   // Filter based on hidePassed state
   const displayedList = processedList.filter(item => {
@@ -90,7 +80,7 @@ export default function TimetableList({ route, currentTime, directionFilter = 't
         <div className="acc-title-group">
           <Calendar size={18} color="var(--primary)" />
           <span>전체 시간표 ({shortDayName})</span>
-          {!dayInfo.isNoService && (
+          {!dayInfo.isOutsideTerm && !dayInfo.isNoService && (
             <span className="acc-count-pill">
               {isToSchool ? '등교' : '하교'} 남은 차편 {remainingCount}/{validCount}회
             </span>
@@ -105,20 +95,20 @@ export default function TimetableList({ route, currentTime, directionFilter = 't
 
       <div className={`timetable-accordion-wrapper ${isExpanded ? 'expanded' : ''}`}>
         <div className="timetable-accordion-body">
-          {dayInfo.isNoService ? (
+          {dayInfo.isOutsideTerm || dayInfo.isNoService ? (
             <div style={{ padding: '24px 16px', textAlign: 'center', color: 'var(--text-muted)' }}>
               <div style={{ fontSize: '1.2rem', marginBottom: '8px' }}>🚫</div>
               <strong style={{ color: 'var(--text-main)', display: 'block', marginBottom: '4px' }}>
-                {dayInfo.holidayRule ? `${dayInfo.holidayRule.name} 셔틀버스 운행 없음` : '운행 없음'}
+                {dayInfo.isOutsideTerm ? '최신 시간표 확인 필요' : dayInfo.holidayRule ? `${dayInfo.holidayRule.name} 셔틀버스 운행 없음` : '운행 없음'}
               </strong>
-              <span style={{ fontSize: '0.85rem' }}>{dayInfo.noServiceReason}</span>
+              <span style={{ fontSize: '0.85rem' }}>{dayInfo.isOutsideTerm ? dayInfo.specialNotice : dayInfo.noServiceReason}</span>
             </div>
           ) : (
             <>
               {/* Boarding Location Legend & Filter Bar */}
               <div className="timetable-legend-row">
                 <div className="boarding-legend-group">
-                  {!dayInfo.isWeekend ? (
+                  {['weekday', 'friday'].includes(dayInfo.scheduleType) ? (
                     <span className="legend-chip legend-student-hall">
                       <MapPin size={11} /> 학생회관 경유 (13:30~15:30 / 19:30~막차)
                     </span>
@@ -257,6 +247,7 @@ export default function TimetableList({ route, currentTime, directionFilter = 't
                             </td>
                             <td className={`time-cell ${isToSchool ? 'cell-active-dep' : ''}`}>
                               {item.cheonanDep || '-'}
+                              {item.boardingLocation && <small style={{ display: 'block' }}>{item.boardingLocation} 출발</small>}
                             </td>
                             <td className="time-cell">{item.campusArr || '-'}</td>
                           </>
@@ -269,6 +260,7 @@ export default function TimetableList({ route, currentTime, directionFilter = 't
                             </td>
                             <td className={`time-cell ${isToSchool ? 'cell-active-dep' : ''}`}>
                               {item.terminalDep || '-'}
+                              {item.boardingLocation && <small style={{ display: 'block' }}>{item.boardingLocation} 출발</small>}
                             </td>
                             <td className="time-cell">{item.campusArr || '-'}</td>
                           </>

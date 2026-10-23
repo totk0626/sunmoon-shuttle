@@ -12,9 +12,7 @@ const WEEKDAYS = [
   { label: '일', day: 0 }
 ];
 
-export default function TimeSimulator({ isOpen, onClose, currentTime, onSetSimulatedTime, onResetTime, isSimulated }) {
-  if (!isOpen) return null;
-
+export default function TimeSimulator({ onClose, currentTime, onSetSimulatedTime, onResetTime, isSimulated }) {
   // Initialize state with currentTime
   const [selectedDate, setSelectedDate] = useState(() => new Date(currentTime));
   const [hours, setHours] = useState(() => currentTime.getHours());
@@ -86,7 +84,9 @@ export default function TimeSimulator({ isOpen, onClose, currentTime, onSetSimul
             </span>
           </div>
           <div className={`banner-badge ${previewInfo.isNoService ? 'no-service' : previewInfo.isWeekend ? 'weekend' : 'normal'}`}>
-            {previewInfo.isNoService ? (
+            {previewInfo.isOutsideTerm ? (
+              <>시간표 확인 필요</>
+            ) : previewInfo.isNoService ? (
               <>🚫 {previewInfo.holidayRule ? previewInfo.holidayRule.name : '미운행'}</>
             ) : previewInfo.specialNotice ? (
               <>✨ {previewInfo.badgeText}</>
@@ -103,6 +103,7 @@ export default function TimeSimulator({ isOpen, onClose, currentTime, onSetSimul
         </div>
 
         {/* 1. Day of the Week Selector (월~일) */}
+        {previewInfo.isOutsideTerm && <p role="status">{previewInfo.specialNotice}</p>}
         <div className="sheet-section-title">
           <Calendar size={13} /> 요일 선택
         </div>

@@ -9,6 +9,7 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
     "lint": "oxlint",
+    "test": "node --test src/utils/*.test.js",
     "stats": "node scripts/check-stats.js",
     "preview": "vite preview"
   },

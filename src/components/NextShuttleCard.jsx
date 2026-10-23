@@ -1,22 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Bus, Clock, MapPin, Zap, ShieldCheck, AlertTriangle, Sliders, ArrowRight } from 'lucide-react';
+import React from 'react';
+import { Bus, Clock, MapPin, ShieldCheck, AlertTriangle, Sliders, ArrowRight } from 'lucide-react';
 import { getUpcomingBuses, formatRemainingTime, getDayInfo } from '../utils/timeUtils';
 
 export default function NextShuttleCard({ selectedRoute, currentTime, directionFilter, onOpenSimulator }) {
-  const [secCountdown, setSecCountdown] = useState(0);
-
   const upcomingList = getUpcomingBuses(selectedRoute, currentTime, directionFilter);
   const nextBus = upcomingList[0];
   const subsequentBuses = upcomingList.slice(1, 3);
   const dayInfo = getDayInfo(currentTime, selectedRoute);
 
-  useEffect(() => {
-    if (!nextBus) return;
-    const currentMins = currentTime.getHours() * 60 + currentTime.getMinutes();
-    const currentSecs = currentTime.getSeconds();
-    const remainingSecs = (nextBus.depMins - currentMins) * 60 - currentSecs;
-    setSecCountdown(Math.max(0, remainingSecs));
-  }, [currentTime, nextBus]);
+  const secCountdown = Math.max(0, nextBus?.diffSecs ?? 0);
 
   const formatSecsToMinSec = (totalSeconds) => {
     if (totalSeconds <= 0) return '지금 출발!';
@@ -43,14 +35,14 @@ export default function NextShuttleCard({ selectedRoute, currentTime, directionF
 
   return (
     <div className="next-shuttle-widget-wrap">
-      {dayInfo.isNoService ? (
+      {dayInfo.isOutsideTerm || dayInfo.isNoService ? (
         <div className="end-service-widget">
           <AlertTriangle size={32} color="#f59e0b" style={{ margin: '0 auto 8px auto' }} />
           <div className="end-service-title">
-            {dayInfo.holidayRule ? `${dayInfo.holidayRule.name} 셔틀 미운행 🚫` : '셔틀버스 미운행 🚫'}
+            {dayInfo.isOutsideTerm ? '최신 시간표 확인 필요' : dayInfo.holidayRule ? `${dayInfo.holidayRule.name} 셔틀 미운행 🚫` : '셔틀버스 미운행 🚫'}
           </div>
           <div className="end-service-desc">
-            {dayInfo.noServiceReason || '해당 날짜에는 셔틀버스가 운행하지 않습니다.'}
+            {dayInfo.isOutsideTerm ? dayInfo.specialNotice : dayInfo.noServiceReason || '해당 날짜에는 셔틀버스가 운행하지 않습니다.'}
           </div>
           <button type="button" className="modal-reset-btn" onClick={onOpenSimulator} style={{ width: 'auto', display: 'inline-flex', padding: '8px 16px' }}>
             <Sliders size={14} /> 다른 날짜/시각 설정해보기
@@ -107,11 +99,13 @@ export default function NextShuttleCard({ selectedRoute, currentTime, directionF
                 <>
                   <ArrowRight size={15} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
                   <div className="badge-dest-box">
-                    {nextBus.destTimeStr} 도착
+                    {nextBus.destTimeStr} {nextBus.destTimeLabel}
                   </div>
                 </>
               )}
             </div>
+
+            {nextBus.boardingNotice && <div className="friday-notice-strip"><MapPin size={12} /> {nextBus.boardingNotice}</div>}
 
             {dayInfo.specialNotice ? (
               <div className="friday-notice-strip" style={{ backgroundColor: 'rgba(59, 130, 246, 0.15)', color: '#2563eb' }}>
@@ -131,6 +125,7 @@ export default function NextShuttleCard({ selectedRoute, currentTime, directionF
                 <div key={idx} className="mini-trip-card">
                   <span className="mini-dep">{bus.depTimeStr} 출발</span>
                   <span className="mini-diff">{formatRemainingTime(bus.diffMins)}</span>
+                  {directionFilter === 'to_school' && <span className="mini-location">{bus.depLocation} 출발</span>}
                 </div>
               ))}
             </div>

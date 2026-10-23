@@ -5,6 +5,7 @@ import RouteSelector from './components/RouteSelector';
 import TimetableList from './components/TimetableList';
 import TimeSimulator from './components/TimeSimulator';
 import ConvenienceModal from './components/ConvenienceModal';
+import TravelLinks from './components/TravelLinks';
 import { ROUTES } from './data/shuttleData';
 import { recordVisit } from './utils/analytics';
 
@@ -61,6 +62,7 @@ export default function App() {
       />
 
       <main className="main-content container">
+        <TravelLinks />
         <RouteSelector
           selectedRouteId={selectedRouteId}
           onSelectRoute={setSelectedRouteId}
@@ -88,14 +90,13 @@ export default function App() {
         </div>
       </footer>
 
-      <TimeSimulator
-        isOpen={isSimulatorOpen}
+      {isSimulatorOpen && <TimeSimulator
         onClose={() => setIsSimulatorOpen(false)}
         currentTime={effectiveTime}
         onSetSimulatedTime={(date) => setSimulatedTime(date)}
         onResetTime={() => setSimulatedTime(null)}
         isSimulated={!!simulatedTime}
-      />
+      />}
 
       <ConvenienceModal
         isOpen={isConvenienceOpen}

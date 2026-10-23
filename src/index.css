@@ -135,6 +135,91 @@ body {
   gap: 10px;
 }
 
+.travel-shortcuts {
+  margin-bottom: 16px;
+}
+
+.travel-links {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.travel-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 44px;
+  padding: 8px 4px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-card);
+  color: var(--text-main);
+  font-size: clamp(0.72rem, 3vw, 0.82rem);
+  font-weight: 800;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: var(--transition);
+}
+
+.travel-link:hover {
+  background-color: var(--bg-card-hover);
+}
+
+.travel-link:focus-visible,
+.travel-fallback a:focus-visible,
+.travel-fallback button:focus-visible {
+  outline: 2px solid var(--text-main);
+  outline-offset: 3px;
+}
+
+.travel-link svg {
+  flex-shrink: 0;
+}
+
+.travel-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 4px 8px 4px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  color: var(--text-sub);
+  font-size: 0.78rem;
+}
+
+.travel-fallback > div {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+}
+
+.travel-fallback a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--text-main);
+  font-weight: 800;
+  text-underline-offset: 3px;
+}
+
+.travel-fallback button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  border: none;
+  background: transparent;
+  color: var(--text-sub);
+  cursor: pointer;
+}
+
 .brand-icon {
   width: 36px;
   height: 36px;
@@ -596,7 +681,9 @@ body {
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
   padding: 7px 12px;
-  display: flex;
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 4px;
   align-items: center;
   justify-content: space-between;
   font-size: 0.78rem;
@@ -604,6 +691,7 @@ body {
 
 .mini-dep { font-weight: 800; color: var(--text-main); }
 .mini-diff { color: var(--accent-green); font-weight: 800; }
+.mini-location { grid-column: 1 / -1; color: var(--text-sub); word-break: keep-all; }
 
 .end-service-widget {
   background-color: var(--bg-card);
@@ -1446,4 +1534,3 @@ body {
 .nc-phone-btn:hover {
   opacity: 0.9;
 }
-
